@@ -538,17 +538,27 @@ section{ position:relative; }
 }
 .target-card:hover::before{ transform:scaleX(1); }
 
-.target-card__icon{
-  width:56px; height:56px;
-  color:var(--orange);
+.target-card__head{
+  display:flex;
+  align-items:center;
+  gap:18px;
   margin-bottom:32px;
 }
+
+.target-card__icon{
+  width:56px;
+  height:56px;
+  color:var(--orange);
+  flex:0 0 auto;
+}
+
 .target-card__num{
-  font-family:var(--ff-mono);
-  font-size:11px;
-  letter-spacing:.2em;
+  font-family:var(--ff-body);
+  font-size:16px;
+  letter-spacing:.08em;
+  font-weight:600;
   color:var(--gray);
-  margin-bottom:16px;
+  text-transform:uppercase;
 }
 .target-card__title{
   font-family:var(--ff-display);
