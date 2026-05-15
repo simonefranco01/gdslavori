@@ -1705,8 +1705,8 @@ section{ position:relative; }
   max-width:50ch;
   margin-inline:auto;
 }
-.eyebrow-large {
-  font-size: 3rem;
-  letter-spacing: 0.22em;
-  font-weight: 700;
+.eyebrow.eyebrow-large {
+  font-size: 3rem !important;
+  letter-spacing: 0.12em !important;
+  font-weight: 800 !important;
 }
