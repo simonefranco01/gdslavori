@@ -1959,3 +1959,24 @@ section{ position:relative; }
     display: none !important;
   }
 }
+/* ============ Chi siamo - correzione mobile sezione storia ============ */
+
+@media (max-width: 768px) {
+  body[data-screen-label="Chi siamo"] .section:first-of-type .grid,
+  body[data-screen-label="Chi siamo"] .section:first-of-type [style*="grid-template-columns"] {
+    display: block !important;
+  }
+
+  body[data-screen-label="Chi siamo"] .section:first-of-type .reveal[style*="aspect-ratio"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 32px 0 0 0 !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  body[data-screen-label="Chi siamo"] .section:first-of-type .reveal[style*="aspect-ratio"] img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+}
