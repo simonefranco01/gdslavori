@@ -1867,7 +1867,7 @@ section{ position:relative; }
 /* ============ Sezione A chi ci rivolgiamo ============ */
 
 .section--urban-gray {
-  background: #9FA5AB;
+  background: rgba(159, 165, 171, 0.18);
 }
 
 .section--urban-gray .eyebrow {
