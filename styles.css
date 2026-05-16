@@ -1959,3 +1959,31 @@ section{ position:relative; }
     display: none !important;
   }
 }
+/* ============ Chi siamo - sezione storia mobile ============ */
+
+@media (max-width: 768px) {
+  .about-history .container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+  }
+
+  .about-history .container > * {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .about-history .reveal[style*="aspect-ratio"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 24px 0 0 0 !important;
+    aspect-ratio: 16 / 10 !important;
+    order: 2 !important;
+  }
+
+  .about-history .reveal[style*="aspect-ratio"] img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+}
