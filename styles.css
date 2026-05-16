@@ -1987,3 +1987,23 @@ section{ position:relative; }
     object-fit: cover !important;
   }
 }
+/* ============ Contatti - mappa desktop più compatta ============ */
+
+@media (min-width: 769px) {
+  body[data-screen-label="Contatti"] .map-block {
+    max-width: 900px;
+    margin: 48px auto 0;
+    overflow: hidden;
+    border: 1px solid rgba(16, 38, 57, 0.12);
+    box-shadow: 0 24px 70px rgba(16, 38, 57, 0.10);
+    background: var(--gray-bg);
+  }
+
+  body[data-screen-label="Contatti"] .map-block iframe {
+    width: 100% !important;
+    height: 360px !important;
+    display: block;
+    border: 0;
+    pointer-events: none;
+  }
+}
