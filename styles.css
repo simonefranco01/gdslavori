@@ -1864,3 +1864,23 @@ section{ position:relative; }
     width: 100%;
   }
 }
+/* ============ Sezione A chi ci rivolgiamo ============ */
+
+.section--urban-gray {
+  background: #9FA5AB;
+}
+
+.section--urban-gray .eyebrow {
+  color: var(--orange);
+}
+
+.section--urban-gray .section-title,
+.section--urban-gray .section-text {
+  color: var(--navy);
+}
+
+.section--urban-gray .target-card {
+  background: var(--white);
+  border-color: rgba(16, 38, 57, 0.12);
+  box-shadow: 0 22px 60px rgba(16, 38, 57, 0.10);
+}
