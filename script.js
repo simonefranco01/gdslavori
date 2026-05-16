@@ -189,5 +189,78 @@ if (quoteForm){
     }
   });
 })();
+// ---- Cookie / GDPR banner
+  (() => {
+    const storageKey = 'gds_cookie_consent_v1';
 
+    if (localStorage.getItem(storageKey)) return;
+
+    const banner = document.createElement('section');
+    banner.className = 'cookie-banner';
+    banner.setAttribute('role', 'dialog');
+    banner.setAttribute('aria-live', 'polite');
+    banner.setAttribute('aria-label', 'Informativa cookie');
+
+    banner.innerHTML = `
+      <div class="cookie-banner__icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="3"/>
+          <circle cx="18" cy="18" r="2.5" fill="currentColor"/>
+          <circle cx="29" cy="16" r="2.2" fill="currentColor"/>
+          <circle cx="30" cy="29" r="2.7" fill="currentColor"/>
+          <circle cx="19" cy="31" r="2" fill="currentColor"/>
+          <path d="M35.5 10.5c-2.5 1.2-4.2 3.7-4.2 6.6 0 4.1 3.3 7.4 7.4 7.4.7 0 1.4-.1 2.1-.3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="cookie-banner__content">
+        <h2 class="cookie-banner__title">Cookie e privacy</h2>
+        <p class="cookie-banner__text">
+          Usiamo cookie tecnici necessari al funzionamento del sito e, se attivati, strumenti di miglioramento solo previo consenso.
+          Puoi accettare oppure continuare con i soli cookie necessari.
+        </p>
+
+        <div class="cookie-banner__links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="cookie-policy.html">Cookie Policy</a>
+        </div>
+
+        <div class="cookie-banner__actions">
+          <button class="cookie-btn cookie-btn--primary" type="button" data-cookie-accept>
+            Accetta
+          </button>
+          <button class="cookie-btn cookie-btn--secondary" type="button" data-cookie-essential>
+            Solo necessari
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(banner);
+
+    requestAnimationFrame(() => {
+      banner.classList.add('is-visible');
+    });
+
+    const saveChoice = (choice) => {
+      localStorage.setItem(storageKey, JSON.stringify({
+        choice,
+        date: new Date().toISOString()
+      }));
+
+      banner.classList.remove('is-visible');
+
+      setTimeout(() => {
+        banner.remove();
+      }, 300);
+    };
+
+    banner.querySelector('[data-cookie-accept]').addEventListener('click', () => {
+      saveChoice('accepted');
+    });
+
+    banner.querySelector('[data-cookie-essential]').addEventListener('click', () => {
+      saveChoice('essential');
+    });
+  })();
 })();
