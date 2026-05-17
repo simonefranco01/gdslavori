@@ -153,24 +153,26 @@ if (filterBtns.length && filterTargets.length){
 }
 
 // ---- Form: client-side validation + success state (Netlify-compatible)
+
+// ---- Form Preventivo (Formspree)
 const quoteForm = document.querySelector('form[data-form="quote"]');
 if (quoteForm){
   quoteForm.addEventListener('submit', (e) => {
-    // Honeypot
-    const hp = quoteForm.querySelector('[name="bot-field"]');
-    if (hp && hp.value){ e.preventDefault(); return; }
-    // Let Netlify handle it natively; show success after a short delay
-    // (in real deploy: Netlify redirects to /grazie or the form posts AJAX)
-    // For local preview, prevent default and show success state
-    if (!quoteForm.hasAttribute('data-real-submit')){
+    // Honeypot anti-spam (Formspree usa il campo "_gotcha")
+    const hp = quoteForm.querySelector('[name="_gotcha"]');
+    if (hp && hp.value){
       e.preventDefault();
-      const success = document.querySelector('.form__success');
-      if (success){
-        quoteForm.style.display = 'none';
-        success.classList.add('is-shown');
-        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      return;
     }
+    // Disabilita il bottone per evitare doppi invii e dà feedback all'utente
+    const submitBtn = quoteForm.querySelector('[type="submit"]');
+    if (submitBtn){
+      submitBtn.disabled = true;
+      submitBtn.dataset.originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = 'Invio in corso...';
+    }
+    // Niente preventDefault: l'invio prosegue verso Formspree, che dopo
+    // l'elaborazione fa il redirect a grazie.html (campo _next nel form).
   });
 }
 
