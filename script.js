@@ -264,3 +264,186 @@ if (quoteForm){
     });
   })();
 })();
+// ================================================================
+// PORTFOLIO v2 — Modale progetto + lightbox single-foto
+// Da inserire DENTRO la IIFE di script.js, prima della "})();" finale.
+// ================================================================
+(() => {
+  const modal = document.getElementById('pmodal');
+  if (!modal) return;
+
+  const projects = document.querySelectorAll('.portfolio-all .project');
+  if (!projects.length) return;
+
+  const photoEl   = modal.querySelector('.pmodal__photo');
+  const counterEl = modal.querySelector('.pmodal__counter');
+  const thumbsEl  = modal.querySelector('.pmodal__thumbs');
+  const prevBtn   = modal.querySelector('.pmodal__nav--prev');
+  const nextBtn   = modal.querySelector('.pmodal__nav--next');
+  const closeBtn  = modal.querySelector('.pmodal__close');
+  const catEl     = modal.querySelector('.pmodal__cat');
+  const titleEl   = modal.querySelector('.pmodal__title');
+  const metaEl    = modal.querySelector('.pmodal__meta');
+  const descEl    = modal.querySelector('.pmodal__desc');
+
+  let currentPhotos = [];
+  let currentIndex  = 0;
+  let lastFocused   = null;
+
+  const CAT_LABELS = {
+    'residenziale':   'Residenziale',
+    'industriale':    'Industriale & commerciale',
+    'tinteggiature':  'Tinteggiature'
+  };
+
+  function openModal(project) {
+    lastFocused = document.activeElement;
+    const isSingle = project.dataset.photos === '1';
+    const projectId = project.dataset.project;
+    const cat = (project.dataset.cat || '').split(/\s+/)[0];
+
+    if (isSingle) {
+      // Lightbox singola: prendiamo solo l'immagine della card
+      const cardImg = project.querySelector('.project__img img');
+      currentPhotos = [{
+        src: cardImg ? cardImg.src : '',
+        alt: cardImg ? cardImg.alt : ''
+      }];
+      modal.classList.add('pmodal--single');
+    } else {
+      // Modale completa: cerchiamo il template dati
+      const tpl = document.querySelector(`template.project-data[data-for="${projectId}"]`);
+      modal.classList.remove('pmodal--single');
+
+      if (tpl) {
+        const content = tpl.content;
+        // Foto
+        currentPhotos = Array.from(content.querySelectorAll('.pd-photos img')).map(img => ({
+          src: img.getAttribute('src'),
+          alt: img.getAttribute('alt') || ''
+        }));
+        // Testo
+        const titleNode = content.querySelector('.pd-title');
+        const metaNode  = content.querySelector('.pd-meta');
+        const descNode  = content.querySelector('.pd-desc');
+
+        titleEl.textContent = titleNode ? titleNode.textContent : '';
+        metaEl.textContent  = metaNode  ? metaNode.textContent  : '';
+        descEl.innerHTML    = descNode  ? `<p>${descNode.textContent}</p>` : '';
+        catEl.textContent   = CAT_LABELS[cat] || '';
+      } else {
+        // Fallback se manca il template: usiamo la foto della card
+        const cardImg = project.querySelector('.project__img img');
+        currentPhotos = [{
+          src: cardImg ? cardImg.src : '',
+          alt: cardImg ? cardImg.alt : ''
+        }];
+        const t = project.querySelector('.project__title');
+        const z = project.querySelector('.project__zone');
+        titleEl.textContent = t ? t.textContent : '';
+        metaEl.textContent  = z ? z.textContent : '';
+        descEl.innerHTML    = '';
+        catEl.textContent   = CAT_LABELS[cat] || '';
+      }
+    }
+
+    // Render thumbs
+    thumbsEl.innerHTML = '';
+    if (currentPhotos.length > 1) {
+      currentPhotos.forEach((p, i) => {
+        const t = document.createElement('button');
+        t.type = 'button';
+        t.className = 'pmodal__thumb' + (i === 0 ? ' is-active' : '');
+        t.setAttribute('aria-label', `Mostra foto ${i + 1}`);
+        const im = document.createElement('img');
+        im.src = p.src;
+        im.alt = '';
+        im.loading = 'lazy';
+        t.appendChild(im);
+        t.addEventListener('click', () => goTo(i));
+        thumbsEl.appendChild(t);
+      });
+    }
+
+    currentIndex = 0;
+    showPhoto(0);
+
+    // Open
+    modal.classList.add('is-open');
+    document.body.classList.add('pmodal-lock');
+    requestAnimationFrame(() => modal.classList.add('is-visible'));
+    modal.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
+  }
+
+  function showPhoto(i) {
+    if (!currentPhotos.length) return;
+    currentIndex = (i + currentPhotos.length) % currentPhotos.length;
+    const p = currentPhotos[currentIndex];
+    photoEl.src = p.src;
+    photoEl.alt = p.alt;
+    if (counterEl) counterEl.textContent = `${currentIndex + 1} / ${currentPhotos.length}`;
+    // update thumb states
+    thumbsEl.querySelectorAll('.pmodal__thumb').forEach((th, idx) => {
+      th.classList.toggle('is-active', idx === currentIndex);
+    });
+  }
+
+  function goTo(i)   { showPhoto(i); }
+  function next()    { showPhoto(currentIndex + 1); }
+  function prev()    { showPhoto(currentIndex - 1); }
+
+  function closeModal() {
+    modal.classList.remove('is-visible');
+    modal.setAttribute('aria-hidden', 'true');
+    setTimeout(() => {
+      modal.classList.remove('is-open', 'pmodal--single');
+      document.body.classList.remove('pmodal-lock');
+      photoEl.src = '';
+      if (lastFocused && typeof lastFocused.focus === 'function') {
+        lastFocused.focus();
+      }
+    }, 300);
+  }
+
+  // --- Wire up clicks on projects ---
+  projects.forEach(project => {
+    project.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal(project);
+    });
+  });
+
+  // --- Controls ---
+  if (prevBtn) prevBtn.addEventListener('click', prev);
+  if (nextBtn) nextBtn.addEventListener('click', next);
+  closeBtn.addEventListener('click', closeModal);
+
+  // Click sul backdrop (fuori da .pmodal__inner) chiude
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Tastiera
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'ArrowRight' && !modal.classList.contains('pmodal--single')) next();
+    if (e.key === 'ArrowLeft'  && !modal.classList.contains('pmodal--single')) prev();
+  });
+
+  // Swipe touch su mobile
+  let touchStartX = null;
+  modal.addEventListener('touchstart', (e) => {
+    if (modal.classList.contains('pmodal--single')) return;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  modal.addEventListener('touchend', (e) => {
+    if (touchStartX === null || modal.classList.contains('pmodal--single')) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) {
+      if (dx < 0) next(); else prev();
+    }
+    touchStartX = null;
+  });
+})();
