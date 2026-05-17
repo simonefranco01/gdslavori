@@ -2324,4 +2324,64 @@ body.pmodal-lock{ overflow:hidden; }
   display: block !important;
 }
 
+/////////////////////* FIX CARD PORTFOLIO - immagini uniformi senza rompere i filtri */
+body[data-screen-label="Portfolio"] .portfolio-all .project {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: var(--gray-bg) !important;
+}
 
+body[data-screen-label="Portfolio"] .portfolio-all .project__img {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
+  overflow: hidden !important;
+  background: var(--gray-bg) !important;
+  margin: 0 !important;
+}
+
+body[data-screen-label="Portfolio"] .portfolio-all .project__img img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+body[data-screen-label="Portfolio"] .portfolio-all .project__caption {
+  flex: 1 !important;
+  min-height: 76px !important;
+  height: auto !important;
+  padding: 18px 24px 20px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  background: var(--gray-bg) !important;
+}
+
+body[data-screen-label="Portfolio"] .portfolio-all .project__title {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 22px !important;
+  line-height: 1.15 !important;
+  max-width: 100% !important;
+}
+
+/* Mobile: immagini leggermente più alte e leggibili */
+@media (max-width: 768px) {
+  body[data-screen-label="Portfolio"] .portfolio-all .project__img {
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  body[data-screen-label="Portfolio"] .portfolio-all .project__caption {
+    min-height: 64px !important;
+    padding: 16px 18px 18px !important;
+  }
+
+  body[data-screen-label="Portfolio"] .portfolio-all .project__title {
+    font-size: 20px !important;
+  }
+}
