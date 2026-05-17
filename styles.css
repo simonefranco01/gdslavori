@@ -2303,3 +2303,16 @@ body.pmodal-lock{ overflow:hidden; }
   .pmodal{ transition:none; }
   .pmodal__close:hover{ transform:none; }
 }
+/* ============ Portfolio - rimozione riferimenti località/anno ============ */
+
+.pmodal__meta {
+  display: none !important;
+}
+
+.portfolio-all .project__zone,
+.portfolio-all .project__meta,
+.portfolio-all .project__location,
+.portfolio-all .project__date,
+.portfolio-all .project__caption {
+  display: none !important;
+}
