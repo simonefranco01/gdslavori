@@ -2001,3 +2001,305 @@ section{ position:relative; }
     pointer-events: none !important;
   }
 }
+/* ================================================================
+   PORTFOLIO v2 — Badge categoria + modale progetto
+   Da appendere alla fine di styles.css
+   ================================================================ */
+
+/* --- Badge categoria sulla card ---------------------------------- */
+.portfolio-all .project{ position:relative; }
+
+.project__badge{
+  position:absolute;
+  top:14px; left:14px;
+  z-index:3;
+  display:inline-block;
+  padding:6px 12px;
+  background:var(--orange);
+  color:#fff;
+  font-family:var(--ff-mono);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  line-height:1;
+  pointer-events:none;
+}
+
+/* --- Stato single/multi sulla card ------------------------------- */
+/* I progetti single-photo non hanno .project__overlay nel markup,
+   quindi non serve nasconderlo: assenza == niente overlay.
+   Aggiungiamo solo una piccola affordance: l'icona zoom in alto a dx
+   sulle card single-photo, per far capire che si può cliccare. */
+.portfolio-all .project:not(:has(.project__overlay))::after{
+  content:"";
+  position:absolute;
+  top:14px; right:14px;
+  width:36px; height:36px;
+  background:rgba(16,38,57,.78) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.8'%3E%3Ccircle cx='11' cy='11' r='6'/%3E%3Cpath d='M20 20l-4-4M9 11h4M11 9v4'/%3E%3C/svg%3E") center / 18px no-repeat;
+  opacity:0;
+  transition:opacity .3s var(--ease-out);
+  z-index:3;
+  pointer-events:none;
+}
+.portfolio-all .project:not(:has(.project__overlay)):hover::after{ opacity:1; }
+
+/* Fallback per browser che non supportano :has() — mostriamo zoom sempre,
+   meglio una piccola affordance fissa che niente */
+@supports not selector(:has(*)){
+  .portfolio-all .project:not([data-photos="1"])::after{ display:none; }
+}
+
+/* --- Override sulla zona: adesso include anche l'anno ------------ */
+.project__zone{
+  font-family:var(--ff-mono);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--gray);
+}
+
+/* --- Hover sulla card più "fisico" ------------------------------- */
+.portfolio-all .project{
+  transition:transform .35s var(--ease-out);
+}
+.portfolio-all .project:hover{
+  transform:translateY(-4px);
+}
+
+/* ================================================================
+   PROJECT MODAL — usata per multi-foto E per lightbox single-foto
+   ================================================================ */
+
+.pmodal{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  background:rgba(8,18,28,.92);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  display:none;
+  opacity:0;
+  transition:opacity .3s var(--ease-out);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.pmodal.is-open{ display:block; }
+.pmodal.is-visible{ opacity:1; }
+body.pmodal-lock{ overflow:hidden; }
+
+.pmodal__close{
+  position:fixed;
+  top:24px; right:24px;
+  z-index:5;
+  width:48px; height:48px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;
+  cursor:pointer;
+  transition:background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.pmodal__close:hover{
+  background:var(--orange);
+  border-color:var(--orange);
+  transform:rotate(90deg);
+}
+.pmodal__close svg{ width:20px; height:20px; }
+
+.pmodal__inner{
+  min-height:100%;
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:0;
+  align-items:stretch;
+}
+
+/* Su single-photo nascondiamo il pannello info: lo gestisce JS via class */
+.pmodal--single .pmodal__inner{ grid-template-columns:1fr; }
+.pmodal--single .pmodal__info{ display:none; }
+.pmodal--single .pmodal__thumbs{ display:none; }
+.pmodal--single .pmodal__nav{ display:none; }
+.pmodal--single .pmodal__counter{ display:none; }
+
+/* --- Gallery side ------------------------------------------------ */
+.pmodal__gallery{
+  position:relative;
+  background:#0a1722;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+.pmodal--single .pmodal__gallery{ min-height:100vh; }
+
+.pmodal__stage{
+  position:relative;
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:64px 56px 24px;
+  overflow:hidden;
+}
+.pmodal__photo{
+  max-width:100%;
+  max-height:calc(100vh - 200px);
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  display:block;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.6);
+}
+.pmodal--single .pmodal__stage{
+  padding:80px 40px;
+}
+.pmodal--single .pmodal__photo{
+  max-height:calc(100vh - 160px);
+}
+
+/* Nav arrows */
+.pmodal__nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:48px; height:48px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;
+  cursor:pointer;
+  transition:background .2s ease, border-color .2s ease;
+  z-index:2;
+}
+.pmodal__nav:hover{
+  background:var(--orange);
+  border-color:var(--orange);
+}
+.pmodal__nav svg{ width:22px; height:22px; }
+.pmodal__nav--prev{ left:12px; }
+.pmodal__nav--next{ right:12px; }
+
+.pmodal__counter{
+  position:absolute;
+  top:24px; left:24px;
+  font-family:var(--ff-mono);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.6);
+  padding:6px 12px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+/* Thumbs strip */
+.pmodal__thumbs{
+  display:flex;
+  gap:10px;
+  padding:16px 24px 24px;
+  overflow-x:auto;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.2) transparent;
+}
+.pmodal__thumbs::-webkit-scrollbar{ height:6px; }
+.pmodal__thumbs::-webkit-scrollbar-track{ background:transparent; }
+.pmodal__thumbs::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.2); }
+
+.pmodal__thumb{
+  flex:0 0 80px;
+  width:80px;
+  height:60px;
+  padding:0;
+  border:1.5px solid transparent;
+  background:#000;
+  cursor:pointer;
+  opacity:.55;
+  transition:opacity .2s ease, border-color .2s ease;
+}
+.pmodal__thumb img{
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.pmodal__thumb:hover{ opacity:.85; }
+.pmodal__thumb.is-active{
+  opacity:1;
+  border-color:var(--orange);
+}
+
+/* --- Info side (multi-foto only) -------------------------------- */
+.pmodal__info{
+  background:#fff;
+  padding:80px 56px 56px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  color:var(--ink);
+}
+.pmodal__cat{
+  margin-bottom:8px;
+  color:var(--orange);
+}
+.pmodal__title{
+  font-family:var(--ff-display);
+  font-weight:700;
+  font-size:clamp(28px, 2.6vw, 38px);
+  line-height:1.15;
+  letter-spacing:-.015em;
+  color:var(--navy);
+  margin:0;
+  text-wrap:balance;
+}
+.pmodal__meta{
+  font-family:var(--ff-mono);
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--gray);
+  margin:0;
+  padding-bottom:24px;
+  border-bottom:1px solid var(--gray-light);
+}
+.pmodal__desc{
+  font-size:16px;
+  line-height:1.7;
+  color:#3a4654;
+  flex:1;
+}
+.pmodal__desc p{ margin:0 0 16px; }
+.pmodal__cta{
+  align-self:flex-start;
+  margin-top:auto;
+}
+
+/* --- Mobile ----------------------------------------------------- */
+@media (max-width:960px){
+  .pmodal__inner{ grid-template-columns:1fr; }
+  .pmodal__gallery{ min-height:auto; }
+  .pmodal__stage{
+    padding:64px 16px 16px;
+  }
+  .pmodal__photo{
+    max-height:60vh;
+  }
+  .pmodal--single .pmodal__photo{ max-height:80vh; }
+  .pmodal__info{
+    padding:40px 24px 56px;
+  }
+  .pmodal__close{
+    top:12px; right:12px;
+    width:40px; height:40px;
+  }
+  .pmodal__nav{
+    width:40px; height:40px;
+  }
+  .pmodal__nav--prev{ left:6px; }
+  .pmodal__nav--next{ right:6px; }
+  .pmodal__counter{
+    top:14px; left:14px;
+    font-size:10px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .pmodal{ transition:none; }
+  .pmodal__close:hover{ transform:none; }
+}
