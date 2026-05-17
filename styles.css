@@ -2323,3 +2323,25 @@ body.pmodal-lock{ overflow:hidden; }
 .portfolio-all .project__title {
   display: block !important;
 }
+
+/* ============ Portfolio - caption compatta sotto le card ============ */
+
+.portfolio-all .project__caption {
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 22px 24px 26px !important;
+  background: var(--gray-bg);
+}
+
+.portfolio-all .project__title {
+  margin: 0 !important;
+  max-width: 100% !important;
+}
+
+.portfolio-all .project__zone,
+.portfolio-all .project__meta,
+.portfolio-all .project__location,
+.portfolio-all .project__date {
+  display: none !important;
+}
