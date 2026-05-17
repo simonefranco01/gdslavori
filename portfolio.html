@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Portfolio — Lavori realizzati a Prato e in Toscana | GDS Lavori</title>
-<meta name="description" content="I cantieri di GDS Lavori: ristrutturazioni residenziali e industriali, restauri di facciate, cappotti termici a Prato, Firenze e Toscana." />
+<meta name="description" content="I cantieri di GDS Lavori: ristrutturazioni residenziali e industriali, tinteggiature a Prato, Firenze e Toscana." />
 <meta name="theme-color" content="#102639" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Portfolio — Lavori realizzati a Prato e in Toscana | GDS Lavori" />
-<meta property="og:description" content="I cantieri di GDS Lavori: ristrutturazioni residenziali e industriali, restauri di facciate, cappotti termici a Prato, Firenze e Toscana." />
+<meta property="og:description" content="I cantieri di GDS Lavori: ristrutturazioni residenziali e industriali, tinteggiature a Prato, Firenze e Toscana." />
 <meta property="og:locale" content="it_IT" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -50,122 +50,248 @@
       Quarant’anni<br/><span class="accent">di cantieri in Toscana.</span>
     </h1>
     <p class="page-hero__sub">
-      Una selezione dei progetti più rappresentativi tra civile, industriale e restauro. Ogni cantiere è documentato con foto reali.
+      Una selezione dei progetti più rappresentativi tra residenziale, industriale e tinteggiature. Ogni cantiere è documentato con foto reali.
     </p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
+
+    <!-- Filter bar -->
     <div class="filter-bar reveal" role="tablist" aria-label="Filtra per categoria">
-      <button class="filter-btn is-active" data-filter="all">Tutti</button>
-      <button class="filter-btn" data-filter="privati">Residenziale</button>
-      <button class="filter-btn" data-filter="industriale">Industriale &amp; commerciale</button>
-      <button class="filter-btn" data-filter="restauro">Restauro</button>
+      <button class="filter-btn is-active" data-filter="all" role="tab" aria-selected="true">Tutti</button>
+      <button class="filter-btn" data-filter="residenziale" role="tab" aria-selected="false">Residenziale</button>
+      <button class="filter-btn" data-filter="industriale" role="tab" aria-selected="false">Industriale &amp; commerciale</button>
+      <button class="filter-btn" data-filter="tinteggiature" role="tab" aria-selected="false">Tinteggiature</button>
     </div>
 
+    <!--
+      ============================================================
+      PORTFOLIO PROJECTS
+      ============================================================
+      Come modificare un progetto:
+      - data-cat: una sola categoria fra: residenziale | industriale | tinteggiature
+      - data-project: id univoco, serve per la modale (es. "attico-mazzini")
+      - data-photos: numero di foto totali del progetto. Se 1 -> apre lightbox singola.
+                     Se >= 2 -> mostra overlay "Vedi progetto" e apre modale con galleria + descrizione.
+
+      Il template <template class="project-data" data-for="..."> in fondo contiene
+      le foto extra e la descrizione del singolo progetto. Un template per progetto multi-foto.
+      ============================================================
+    -->
     <div class="portfolio-all reveal-stagger">
 
-      <a href="#" class="project" data-cat="privati">
+      <!-- Progetto 1 — RESIDENZIALE (multi foto, 4) -->
+      <a href="#" class="project" data-cat="residenziale" data-project="attico-mazzini" data-photos="4">
+        <span class="project__badge">Residenziale</span>
         <div class="project__img">
           <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" alt="Attico Mazzini — ristrutturazione totale 180 m²" loading="lazy" />
         </div>
         <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
         <div class="project__caption">
-          <h3 class="project__title">Attico Mazzini — ristrutturazione totale 180 m²</h3>
-          <span class="project__zone">Prato Centro</span>
+          <h3 class="project__title">Attico Mazzini — ristrutturazione 180 m²</h3>
+          <span class="project__zone">Prato Centro · 2023</span>
         </div>
       </a>
 
-      <a href="#" class="project" data-cat="restauro">
+      <!-- Progetto 2 — RESIDENZIALE (single foto) -->
+      <a href="#" class="project" data-cat="residenziale" data-project="villa-pizzidimonte" data-photos="1">
+        <span class="project__badge">Residenziale</span>
         <div class="project__img">
-          <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1600&q=80" alt="Palazzo Buonamici — ripristino facciata" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80" alt="Villa Pizzidimonte — rifacimento bagni" loading="lazy" />
         </div>
-        <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
         <div class="project__caption">
-          <h3 class="project__title">Palazzo Buonamici — ripristino facciata</h3>
-          <span class="project__zone">Prato</span>
+          <h3 class="project__title">Villa Pizzidimonte — bagni e impianti</h3>
+          <span class="project__zone">Prato Nord · 2022</span>
         </div>
       </a>
 
-      <a href="#" class="project" data-cat="industriale">
+      <!-- Progetto 3 — INDUSTRIALE (multi foto, 3) -->
+      <a href="#" class="project" data-cat="industriale" data-project="capannone-tessile" data-photos="3">
+        <span class="project__badge">Industriale</span>
         <div class="project__img">
           <img src="https://images.unsplash.com/photo-1565182999561-18d7dc61c393?auto=format&fit=crop&w=1600&q=80" alt="Capannone tessile — cappotto e copertura" loading="lazy" />
         </div>
         <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
         <div class="project__caption">
           <h3 class="project__title">Capannone tessile — cappotto e copertura</h3>
-          <span class="project__zone">Montemurlo</span>
+          <span class="project__zone">Montemurlo · 2024</span>
         </div>
       </a>
 
-      <a href="#" class="project" data-cat="privati">
-        <div class="project__img">
-          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80" alt="Villa Pizzidimonte — rifacimento bagni e impianti" loading="lazy" />
-        </div>
-        <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
-        <div class="project__caption">
-          <h3 class="project__title">Villa Pizzidimonte — rifacimento bagni e impianti</h3>
-          <span class="project__zone">Prato Nord</span>
-        </div>
-      </a>
-
-      <a href="#" class="project" data-cat="industriale">
+      <!-- Progetto 4 — INDUSTRIALE (single foto) -->
+      <a href="#" class="project" data-cat="industriale" data-project="showroom-pistoiese" data-photos="1">
+        <span class="project__badge">Commerciale</span>
         <div class="project__img">
           <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80" alt="Showroom via Pistoiese — finiture decorative" loading="lazy" />
         </div>
-        <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
         <div class="project__caption">
-          <h3 class="project__title">Showroom via Pistoiese — finiture decorative</h3>
-          <span class="project__zone">Prato</span>
+          <h3 class="project__title">Showroom via Pistoiese</h3>
+          <span class="project__zone">Prato · 2023</span>
         </div>
       </a>
 
-      <a href="#" class="project" data-cat="privati">
+      <!-- Progetto 5 — INDUSTRIALE (multi foto, 3) -->
+      <a href="#" class="project" data-cat="industriale" data-project="uffici-direzionali" data-photos="3">
+        <span class="project__badge">Commerciale</span>
+        <div class="project__img">
+          <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=80" alt="Uffici direzionali — open space" loading="lazy" />
+        </div>
+        <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
+        <div class="project__caption">
+          <h3 class="project__title">Uffici direzionali — open space</h3>
+          <span class="project__zone">Firenze Nord · 2024</span>
+        </div>
+      </a>
+
+      <!-- Progetto 6 — TINTEGGIATURE (multi foto, 2) -->
+      <a href="#" class="project" data-cat="tinteggiature" data-project="palazzo-buonamici" data-photos="2">
+        <span class="project__badge">Tinteggiature</span>
+        <div class="project__img">
+          <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1600&q=80" alt="Palazzo Buonamici — tinteggiatura facciata" loading="lazy" />
+        </div>
+        <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
+        <div class="project__caption">
+          <h3 class="project__title">Palazzo Buonamici — tinteggiatura facciata</h3>
+          <span class="project__zone">Prato · 2023</span>
+        </div>
+      </a>
+
+      <!-- Progetto 7 — TINTEGGIATURE (single foto) -->
+      <a href="#" class="project" data-cat="tinteggiature" data-project="condominio-roma" data-photos="1">
+        <span class="project__badge">Tinteggiature</span>
+        <div class="project__img">
+          <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1600&q=80" alt="Condominio via Roma — facciata" loading="lazy" />
+        </div>
+        <div class="project__caption">
+          <h3 class="project__title">Condominio via Roma — facciata</h3>
+          <span class="project__zone">Prato · 2022</span>
+        </div>
+      </a>
+
+      <!-- Progetto 8 — RESIDENZIALE (multi foto, 5) -->
+      <a href="#" class="project" data-cat="residenziale" data-project="loft-industriale" data-photos="5">
+        <span class="project__badge">Residenziale</span>
         <div class="project__img">
           <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" alt="Loft industriale — riconversione 320 m²" loading="lazy" />
         </div>
         <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
         <div class="project__caption">
           <h3 class="project__title">Loft industriale — riconversione 320 m²</h3>
-          <span class="project__zone">Sesto Fiorentino</span>
+          <span class="project__zone">Sesto Fiorentino · 2023</span>
         </div>
       </a>
 
-      <a href="#" class="project" data-cat="industriale restauro">
-        <div class="project__img">
-          <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1600&q=80" alt="Condominio via Roma — cappotto termico facciata" loading="lazy" />
-        </div>
-        <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
-        <div class="project__caption">
-          <h3 class="project__title">Condominio via Roma — cappotto termico facciata</h3>
-          <span class="project__zone">Prato</span>
-        </div>
-      </a>
-
-      <a href="#" class="project" data-cat="restauro privati">
+      <!-- Progetto 9 — RESIDENZIALE (multi foto, 3) -->
+      <a href="#" class="project" data-cat="residenziale" data-project="casale-carmignano" data-photos="3">
+        <span class="project__badge">Residenziale</span>
         <div class="project__img">
           <img src="https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1600&q=80" alt="Casale rurale — restauro conservativo" loading="lazy" />
         </div>
         <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
         <div class="project__caption">
           <h3 class="project__title">Casale rurale — restauro conservativo</h3>
-          <span class="project__zone">Carmignano</span>
-        </div>
-      </a>
-
-      <a href="#" class="project" data-cat="industriale">
-        <div class="project__img">
-          <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=80" alt="Uffici direzionali — riqualificazione open space" loading="lazy" />
-        </div>
-        <div class="project__overlay"><span class="project__overlay-cta">Vedi progetto →</span></div>
-        <div class="project__caption">
-          <h3 class="project__title">Uffici direzionali — riqualificazione open space</h3>
-          <span class="project__zone">Firenze Nord</span>
+          <span class="project__zone">Carmignano · 2022</span>
         </div>
       </a>
 
     </div>
+
+    <!--
+      ============================================================
+      PROJECT DATA TEMPLATES
+      ============================================================
+      Un <template> per ogni progetto MULTI-FOTO. Lo script legge:
+      - data-for: deve matchare il data-project del link sopra
+      - .pd-title: titolo nella modale (di solito uguale al titolo card)
+      - .pd-meta: riga sotto il titolo (zona, anno, mq...)
+      - .pd-desc: descrizione (2-4 frasi)
+      - .pd-photos > img: tutte le foto del progetto (la prima è la copertina,
+        di solito uguale a quella della card)
+      ============================================================
+    -->
+
+    <template class="project-data" data-for="attico-mazzini">
+      <h3 class="pd-title">Attico Mazzini — ristrutturazione totale</h3>
+      <p class="pd-meta">Prato Centro · 2023 · 180 m² · 4 mesi di cantiere</p>
+      <p class="pd-desc">
+        Ristrutturazione completa di un attico in centro storico: rifacimento di tutti gli impianti, demolizione e ricostruzione dei tramezzi, posa di nuovi pavimenti in rovere, due bagni in resina e cucina su misura. Tinteggiature finali a calce per mantenere la traspirabilità delle murature originali.
+      </p>
+      <div class="pd-photos">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" alt="Attico Mazzini — vista soggiorno" />
+        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1600&q=80" alt="Attico Mazzini — cucina" />
+        <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=1600&q=80" alt="Attico Mazzini — bagno" />
+        <img src="https://images.unsplash.com/photo-1600573472556-e636c2acda88?auto=format&fit=crop&w=1600&q=80" alt="Attico Mazzini — camera" />
+      </div>
+    </template>
+
+    <template class="project-data" data-for="capannone-tessile">
+      <h3 class="pd-title">Capannone tessile — cappotto e copertura</h3>
+      <p class="pd-meta">Montemurlo · 2024 · 2.400 m² · 6 mesi di cantiere</p>
+      <p class="pd-desc">
+        Riqualificazione energetica di un capannone industriale: applicazione di cappotto termico esterno, rifacimento integrale della copertura con pannelli coibentati, sostituzione dei lucernari. Lavoro eseguito mantenendo l’attività produttiva attiva per fasi.
+      </p>
+      <div class="pd-photos">
+        <img src="https://images.unsplash.com/photo-1565182999561-18d7dc61c393?auto=format&fit=crop&w=1600&q=80" alt="Capannone tessile — esterno" />
+        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1600&q=80" alt="Capannone tessile — copertura" />
+        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=80" alt="Capannone tessile — cappotto in posa" />
+      </div>
+    </template>
+
+    <template class="project-data" data-for="uffici-direzionali">
+      <h3 class="pd-title">Uffici direzionali — riqualificazione open space</h3>
+      <p class="pd-meta">Firenze Nord · 2024 · 480 m² · 3 mesi di cantiere</p>
+      <p class="pd-desc">
+        Trasformazione di uffici frazionati in un grande open space con sale riunioni a vetro: cartongesso acustico, controsoffitti tecnici, nuova illuminazione e tinteggiature in tonalità neutre. Tutto eseguito in 12 settimane lavorative.
+      </p>
+      <div class="pd-photos">
+        <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&q=80" alt="Uffici — open space" />
+        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&q=80" alt="Uffici — sala riunioni" />
+        <img src="https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1600&q=80" alt="Uffici — corridoio" />
+      </div>
+    </template>
+
+    <template class="project-data" data-for="palazzo-buonamici">
+      <h3 class="pd-title">Palazzo Buonamici — tinteggiatura facciata</h3>
+      <p class="pd-meta">Prato · 2023 · facciata storica</p>
+      <p class="pd-desc">
+        Tinteggiatura completa della facciata storica con pitture ai silicati compatibili con l’intonaco originale. Ritocchi su cornici e marcapiani, ripristino delle parti ammalorate prima della stesura del colore finale.
+      </p>
+      <div class="pd-photos">
+        <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1600&q=80" alt="Palazzo Buonamici — facciata" />
+        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80" alt="Palazzo Buonamici — dettaglio cornici" />
+      </div>
+    </template>
+
+    <template class="project-data" data-for="loft-industriale">
+      <h3 class="pd-title">Loft industriale — riconversione 320 m²</h3>
+      <p class="pd-meta">Sesto Fiorentino · 2023 · 320 m² · 5 mesi di cantiere</p>
+      <p class="pd-desc">
+        Riconversione di un ex magazzino in loft residenziale: mantenute le travi a vista e i mattoni originali, inseriti due livelli abitabili, cucina a isola e zona living a doppia altezza. Impianti completamente nuovi a norma.
+      </p>
+      <div class="pd-photos">
+        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" alt="Loft — soggiorno" />
+        <img src="https://images.unsplash.com/photo-1600566753086-00f18fe6ba68?auto=format&fit=crop&w=1600&q=80" alt="Loft — cucina" />
+        <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1600&q=80" alt="Loft — scala" />
+        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=80" alt="Loft — camera" />
+        <img src="https://images.unsplash.com/photo-1616627561950-9f746e330187?auto=format&fit=crop&w=1600&q=80" alt="Loft — bagno" />
+      </div>
+    </template>
+
+    <template class="project-data" data-for="casale-carmignano">
+      <h3 class="pd-title">Casale rurale — restauro conservativo</h3>
+      <p class="pd-meta">Carmignano · 2022 · 240 m² · 8 mesi di cantiere</p>
+      <p class="pd-desc">
+        Restauro conservativo di un casale toscano: consolidamento strutturale, ripristino del tetto in coppi e tegole originali, recupero delle pavimentazioni in cotto e tinteggiature a calce naturale. Rispettati tutti i vincoli paesaggistici.
+      </p>
+      <div class="pd-photos">
+        <img src="https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1600&q=80" alt="Casale — esterno" />
+        <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1600&q=80" alt="Casale — interno living" />
+        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80" alt="Casale — camera" />
+      </div>
+    </template>
+
   </div>
 </section>
 
@@ -183,6 +309,44 @@
     </div>
   </div>
 </section>
+
+<!--
+  ============================================================
+  MODALE PROGETTO (multi-foto) + LIGHTBOX (single-foto)
+  Markup unico riusato dallo script.
+  ============================================================
+-->
+<div class="pmodal" id="pmodal" role="dialog" aria-modal="true" aria-labelledby="pmodal-title" aria-hidden="true">
+  <button class="pmodal__close" type="button" aria-label="Chiudi">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M6 18L18 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/></svg>
+  </button>
+
+  <div class="pmodal__inner">
+    <!-- Galleria (per multi-foto) o singola immagine (per single-foto) -->
+    <div class="pmodal__gallery">
+      <div class="pmodal__stage">
+        <img class="pmodal__photo" src="" alt="" />
+        <button class="pmodal__nav pmodal__nav--prev" type="button" aria-label="Foto precedente">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+        </button>
+        <button class="pmodal__nav pmodal__nav--next" type="button" aria-label="Foto successiva">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+        </button>
+        <div class="pmodal__counter" aria-live="polite"></div>
+      </div>
+      <div class="pmodal__thumbs" role="tablist" aria-label="Miniature galleria"></div>
+    </div>
+
+    <!-- Pannello descrizione (mostrato solo per multi-foto) -->
+    <aside class="pmodal__info">
+      <span class="pmodal__cat eyebrow"></span>
+      <h2 class="pmodal__title" id="pmodal-title"></h2>
+      <p class="pmodal__meta"></p>
+      <div class="pmodal__desc"></div>
+      <a href="preventivo.html" class="btn btn--primary pmodal__cta">Voglio un lavoro così →</a>
+    </aside>
+  </div>
+</div>
 
 </main>
 
