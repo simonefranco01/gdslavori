@@ -2324,41 +2324,4 @@ body.pmodal-lock{ overflow:hidden; }
   display: block !important;
 }
 
-/* ============ Portfolio - card compatte definitive ============ */
 
-body[data-screen-label="Portfolio"] .portfolio-all .project {
-  height: auto !important;
-  min-height: 0 !important;
-  display: block !important;
-  background: var(--gray-bg) !important;
-}
-
-body[data-screen-label="Portfolio"] .portfolio-all .project__img {
-  display: block !important;
-  margin: 0 !important;
-}
-
-body[data-screen-label="Portfolio"] .portfolio-all .project__caption {
-  display: block !important;
-  height: auto !important;
-  min-height: 0 !important;
-  padding: 18px 24px 20px !important;
-  margin: 0 !important;
-  background: var(--gray-bg) !important;
-}
-
-body[data-screen-label="Portfolio"] .portfolio-all .project__title {
-  display: block !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  max-width: 100% !important;
-  font-size: 22px !important;
-  line-height: 1.15 !important;
-}
-
-body[data-screen-label="Portfolio"] .portfolio-all .project__zone,
-body[data-screen-label="Portfolio"] .portfolio-all .project__meta,
-body[data-screen-label="Portfolio"] .portfolio-all .project__location,
-body[data-screen-label="Portfolio"] .portfolio-all .project__date {
-  display: none !important;
-}
