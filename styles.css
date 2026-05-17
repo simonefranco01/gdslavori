@@ -2312,7 +2312,14 @@ body.pmodal-lock{ overflow:hidden; }
 .portfolio-all .project__zone,
 .portfolio-all .project__meta,
 .portfolio-all .project__location,
-.portfolio-all .project__date,
-.portfolio-all .project__caption {
+.portfolio-all .project__date {
   display: none !important;
+}
+
+.portfolio-all .project__caption {
+  display: block !important;
+}
+
+.portfolio-all .project__title {
+  display: block !important;
 }
