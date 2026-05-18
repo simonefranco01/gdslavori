@@ -2465,3 +2465,18 @@ body[data-screen-label="Portfolio"] .pmodal__close:hover {
     height: 22px !important;
   }
 }
+
+////* GRUPPO PORTFOLIO - Ristrutturazione completa terratetto */
+body[data-screen-label="Portfolio"] .portfolio-all .project[data-series="terratetto"] .project__caption {
+  background: rgba(240, 123, 37, 0.13) !important;
+  padding: 16px 20px 18px !important;
+  border-top: 2px solid rgba(240, 123, 37, 0.35) !important;
+}
+
+body[data-screen-label="Portfolio"] .portfolio-all .project[data-series="terratetto"] .project__title {
+  color: var(--navy) !important;
+}
+
+body[data-screen-label="Portfolio"] .portfolio-all .project[data-series="terratetto"] {
+  background: rgba(240, 123, 37, 0.13) !important;
+}
