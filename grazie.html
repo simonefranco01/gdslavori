@@ -6,11 +6,23 @@
 <title>Grazie — Richiesta ricevuta | GDS Lavori</title>
 <meta name="description" content="Abbiamo ricevuto la tua richiesta di preventivo. Ti contattiamo entro 48 ore lavorative." />
 <meta name="theme-color" content="#102639" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="Grazie — Richiesta ricevuta | GDS Lavori" />
-<meta property="og:description" content="Abbiamo ricevuto la tua richiesta di preventivo. Ti contattiamo entro 48 ore lavorative." />
-<meta property="og:locale" content="it_IT" />
-<meta name="twitter:card" content="summary_large_image" />
+<!-- Google Analytics 4 + Conversion Tracking -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F5SQ826FX3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-F5SQ826FX3');
+
+  // CONVERSIONE: lead acquisito tramite form preventivo
+  gtag('event', 'generate_lead', {
+    'event_category': 'preventivo',
+    'event_label': 'form_preventivo_submit',
+    'value': 1
+  });
+</script>
+<meta name="robots" content="noindex, follow" />
+<link rel="canonical" href="https://gdslavori.it/grazie.html" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
@@ -23,7 +35,7 @@
 <header class="header" id="site-header">
   <div class="container header__inner">
     <a href="index.html" class="brand" aria-label="GDS Lavori — home">
-      <img class="brand__logo" src="assets/logo-gds-trimmed.png" alt="GDS Lavori" />
+      <img class="brand__logo" src="assets/logo-gds-trimmed.png" alt="GDS Lavori — Impresa Edile a Prato" width="160" height="48" fetchpriority="high" decoding="async" />
       <span class="brand__name">GDS Lavori<small>Impresa Edile · Prato</small></span>
     </a>
     <nav class="nav" id="primary-nav" aria-label="Navigazione principale">
