@@ -1,4 +1,15 @@
 User-agent: *
 Allow: /
 
+# Pagine di conversione (form preventivo) — non indicizzare
+Disallow: /preventivo.html
+
+# Pagina ringraziamento post-form — non indicizzare ma serve a GA4
+Disallow: /grazie.html
+
+# Pagine legali — bassissimo valore SEO
+Disallow: /privacy-policy.html
+Disallow: /cookie-policy.html
+
+# Sitemap del sito
 Sitemap: https://gdslavori.it/sitemap.xml
