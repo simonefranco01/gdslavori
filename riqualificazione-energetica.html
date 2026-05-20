@@ -290,7 +290,12 @@
     line-height: 1.55 !important;
   }
 
+/* ESAGONO - palette dedicata */
   .esag-section {
+    --esag-petrol: #2f4862;
+    --esag-orange: #f27911;
+    --esag-gray: #9fa5ab;
+    --esag-gray-soft: #d4d8db;
     padding: 90px 0;
     background: linear-gradient(180deg, #f7f9fb 0%, #ffffff 100%);
     overflow: hidden;
@@ -317,8 +322,10 @@
     z-index: 1;
   }
   .esag-svg .esag-line {
-    stroke: rgba(16, 38, 57, 0.35);
-    stroke-width: 1.2;
+    stroke: var(--esag-gray);
+    stroke-width: 4;
+    stroke-dasharray: 10 6;
+    stroke-linecap: round;
     fill: none;
     transition: stroke .35s ease, stroke-width .35s ease;
   }
@@ -327,8 +334,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 280px;
-    height: 280px;
+    width: 320px;
+    height: 320px;
     transform: translate(-50%, -50%);
     z-index: 2;
     display: flex;
@@ -336,22 +343,22 @@
     justify-content: center;
     text-align: center;
     color: #fff;
-    padding: 36px;
+    padding: 40px;
   }
   .esag-center::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--rqe-navy);
+    background: var(--esag-petrol);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     z-index: -2;
   }
   .esag-center::after {
     content: '';
     position: absolute;
-    inset: 14px;
-    border: 1.5px solid var(--rqe-accent);
-    opacity: 0.65;
+    inset: 16px;
+    border: 2px solid var(--esag-orange);
+    opacity: 0.75;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     z-index: -1;
   }
@@ -362,27 +369,28 @@
   .esag-center__eyebrow {
     display: block;
     font-family: 'Poppins', sans-serif;
-    color: var(--rqe-accent-soft);
-    font-size: 0.7rem;
+    color: var(--esag-orange);
+    font-size: 1rem;
     font-weight: 700;
-    letter-spacing: 0.25em;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
   }
   .esag-center__title {
     font-family: 'Poppins', sans-serif;
     font-weight: 800;
-    font-size: 1.4rem;
-    line-height: 1.15;
-    color: #fff;
+    font-size: 1.9rem;
+    line-height: 1.1;
+    color: #ffffff;
     margin: 0;
+    letter-spacing: -0.01em;
   }
 
   .esag-card {
     position: absolute;
     width: 200px;
     background: #fff;
-    border: 1.5px solid rgba(16, 38, 57, 0.15);
+    border: 1.5px solid var(--esag-gray);
     padding: 18px 18px 18px 22px;
     z-index: 3;
     cursor: pointer;
@@ -397,14 +405,14 @@
     left: 0;
     width: 4px;
     height: 100%;
-    background: var(--rqe-accent);
+    background: var(--esag-orange);
     transition: width .35s cubic-bezier(.2, .8, .2, 1);
   }
   .esag-card__num {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.65rem;
     font-weight: 600;
-    color: var(--rqe-accent);
+    color: var(--esag-orange);
     letter-spacing: 0.2em;
     margin-bottom: 6px;
     display: block;
@@ -414,7 +422,7 @@
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     font-size: 1rem;
-    color: var(--rqe-navy);
+    color: var(--esag-petrol);
     line-height: 1.2;
     margin: 0 0 4px;
     transition: color .3s ease;
@@ -422,7 +430,7 @@
   .esag-card__desc {
     font-family: 'Montserrat', sans-serif;
     font-size: 0.78rem;
-    color: rgba(16, 38, 57, 0.65);
+    color: rgba(47, 72, 98, 0.7);
     line-height: 1.45;
     margin: 6px 0 0;
     max-height: 0;
@@ -432,17 +440,17 @@
   }
 
   .esag-card:hover {
-    background: var(--rqe-navy);
-    border-color: var(--rqe-navy);
+    background: var(--esag-petrol);
+    border-color: var(--esag-petrol);
     transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(16, 38, 57, 0.22);
+    box-shadow: 0 16px 40px rgba(47, 72, 98, 0.25);
   }
   .esag-card:hover::before {
     width: 6px;
-    background: var(--rqe-accent-soft);
+    background: var(--esag-orange);
   }
   .esag-card:hover .esag-card__num {
-    color: var(--rqe-accent-soft);
+    color: var(--esag-orange);
   }
   .esag-card:hover .esag-card__title {
     color: #fff;
@@ -450,7 +458,7 @@
   .esag-card:hover .esag-card__desc {
     max-height: 80px;
     opacity: 1;
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.88);
   }
 
   .esag-card[data-pos="1"] {
@@ -515,11 +523,14 @@
       width: 180px;
     }
     .esag-center {
-      width: 240px;
-      height: 240px;
+      width: 270px;
+      height: 270px;
     }
     .esag-center__title {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
+    }
+    .esag-center__eyebrow {
+      font-size: 0.85rem;
     }
   }
   @media (max-width: 900px) {
@@ -534,8 +545,8 @@
       top: auto;
       left: auto;
       transform: none;
-      width: 240px;
-      height: 240px;
+      width: 280px;
+      height: 280px;
       margin: 0 auto 40px;
     }
     .esag-cards-grid {
@@ -570,11 +581,14 @@
       grid-template-columns: 1fr;
     }
     .esag-center {
-      width: 200px;
-      height: 200px;
+      width: 220px;
+      height: 220px;
     }
     .esag-center__title {
-      font-size: 1.05rem;
+      font-size: 1.2rem;
+    }
+    .esag-center__eyebrow {
+      font-size: 0.75rem;
     }
   }
 
@@ -724,14 +738,14 @@
 
     <div class="esag-wrap" role="group" aria-label="Diagramma interattivo degli interventi">
 
-      <svg class="esag-svg" viewBox="0 0 1100 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <line class="esag-line" x1="550" y1="180" x2="550" y2="80"/>
-        <line class="esag-line" x1="676" y1="245" x2="880" y2="220"/>
-        <line class="esag-line" x1="676" y1="355" x2="880" y2="380"/>
-        <line class="esag-line" x1="550" y1="420" x2="550" y2="520"/>
-        <line class="esag-line" x1="424" y1="355" x2="220" y2="380"/>
-        <line class="esag-line" x1="424" y1="245" x2="220" y2="220"/>
-      </svg>
+    <svg class="esag-svg" viewBox="0 0 1100 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <line class="esag-line" x1="550" y1="160" x2="550" y2="80"/>
+  <line class="esag-line" x1="690" y1="240" x2="880" y2="220"/>
+  <line class="esag-line" x1="690" y1="360" x2="880" y2="380"/>
+  <line class="esag-line" x1="550" y1="440" x2="550" y2="520"/>
+  <line class="esag-line" x1="410" y1="360" x2="220" y2="380"/>
+  <line class="esag-line" x1="410" y1="240" x2="220" y2="220"/>
+</svg>
 
       <div class="esag-center">
         <div class="esag-center__inner">
