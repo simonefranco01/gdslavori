@@ -172,6 +172,12 @@
 <link rel="stylesheet" href="styles.css" />
 
 <style>
+  /* =============================================================
+     PAGINA RIQUALIFICAZIONE ENERGETICA — CSS dedicato
+     Tutte le regole sono scoped al body[data-screen-label="..."]
+     per non interferire con le altre pagine.
+     ============================================================= */
+
   body[data-screen-label="Riqualificazione Energetica"] {
     --rqe-navy: #102639;
     --rqe-navy-soft: #1a3550;
@@ -179,6 +185,7 @@
     --rqe-accent-soft: #fcd34d;
   }
 
+  /* Colori testo coerenti */
   body[data-screen-label="Riqualificazione Energetica"] main h1,
   body[data-screen-label="Riqualificazione Energetica"] main h2,
   body[data-screen-label="Riqualificazione Energetica"] main h3,
@@ -210,8 +217,9 @@
     color: inherit;
   }
 
+  /* ---------- PAGE HERO ---------- */
   body[data-screen-label="Riqualificazione Energetica"] .page-hero {
-    padding-top: 90px;
+    padding-top: calc(var(--header-h) + 80px);
     padding-bottom: 90px;
   }
   body[data-screen-label="Riqualificazione Energetica"] .page-hero__inner {
@@ -219,17 +227,18 @@
     margin: 0 auto;
   }
   body[data-screen-label="Riqualificazione Energetica"] .page-hero__title {
-    font-size: clamp(2.4rem, 5.2vw, 4.2rem);
-    line-height: 1.05;
+    font-size: clamp(2.2rem, 5.2vw, 4.2rem);
+    line-height: 1.08;
     margin-top: 20px;
   }
   body[data-screen-label="Riqualificazione Energetica"] .page-hero__sub {
     margin-top: 24px;
-    font-size: 1.08rem;
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
     line-height: 1.6;
     max-width: 820px;
   }
 
+  /* ---------- SEZIONI BASE ---------- */
   body[data-screen-label="Riqualificazione Energetica"] .section {
     padding-top: 80px;
     padding-bottom: 80px;
@@ -239,58 +248,99 @@
   }
   body[data-screen-label="Riqualificazione Energetica"] .section h2,
   body[data-screen-label="Riqualificazione Energetica"] .section .h-2 {
-    font-size: clamp(1.9rem, 3.6vw, 2.8rem);
-    line-height: 1.1;
+    font-size: clamp(1.7rem, 3.6vw, 2.8rem);
+    line-height: 1.15;
   }
   body[data-screen-label="Riqualificazione Energetica"] .section .lead {
-    font-size: 1.05rem;
-    line-height: 1.6;
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
+    line-height: 1.65;
   }
   body[data-screen-label="Riqualificazione Energetica"] .section p {
-    font-size: 1.02rem;
+    font-size: 1rem;
     line-height: 1.65;
   }
 
-  body[data-screen-label="Riqualificazione Energetica"] #cosa-significa .container {
-    grid-template-columns: 1.05fr 0.95fr !important;
-    gap: 64px !important;
-  }
-  body[data-screen-label="Riqualificazione Energetica"] #cosa-significa .reveal:last-child {
-    margin-top: 0 !important;
-    max-width: 100% !important;
+  /* Eyebrow large addomesticato (era 1.5rem fisso = troppo su mobile) */
+  body[data-screen-label="Riqualificazione Energetica"] .eyebrow.eyebrow-large {
+    font-size: clamp(0.78rem, 1vw, 0.95rem) !important;
+    letter-spacing: 0.18em !important;
+    font-weight: 600 !important;
   }
 
+  /* ---------- SEZIONE "COSA SIGNIFICA" ---------- */
+  body[data-screen-label="Riqualificazione Energetica"] #cosa-significa .container {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 64px;
+    align-items: center;
+  }
+  body[data-screen-label="Riqualificazione Energetica"] #cosa-significa .prose h2 {
+    margin: 16px 0 20px;
+  }
+  body[data-screen-label="Riqualificazione Energetica"] #cosa-significa .prose p {
+    margin-bottom: 16px;
+  }
+
+  /* ---------- SEZIONE "PER CHI SERVE" ---------- */
+  body[data-screen-label="Riqualificazione Energetica"] #per-chi .section-head {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  body[data-screen-label="Riqualificazione Energetica"] #per-chi .section-head__intro {
+    max-width: 60ch;
+    margin-top: 8px;
+  }
   body[data-screen-label="Riqualificazione Energetica"] #per-chi .targets {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
+    gap: 24px;
   }
   body[data-screen-label="Riqualificazione Energetica"] .target-card {
-    padding: 28px;
-    border: 1.5px solid rgba(16, 38, 57, 0.12);
+    padding: 32px 28px;
+    background: #fff;
+    border: 1.5px solid rgba(16, 38, 57, 0.10);
     border-radius: 4px;
-    transition: border-color .25s ease, transform .25s ease;
+    min-height: auto;
+    transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
   }
   body[data-screen-label="Riqualificazione Energetica"] .target-card:hover {
     border-color: var(--rqe-navy);
     transform: translateY(-4px);
+    box-shadow: 0 18px 40px -20px rgba(16, 38, 57, 0.20);
+  }
+  body[data-screen-label="Riqualificazione Energetica"] .target-card__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
   }
   body[data-screen-label="Riqualificazione Energetica"] .target-card__icon {
     width: 36px;
     height: 36px;
     color: var(--rqe-accent);
+    flex: 0 0 auto;
+  }
+  body[data-screen-label="Riqualificazione Energetica"] .target-card__num {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: var(--gray);
+    text-transform: uppercase;
   }
   body[data-screen-label="Riqualificazione Energetica"] .target-card__title {
     font-size: 1.2rem !important;
-    margin: 14px 0 10px;
+    margin: 0 0 10px;
     line-height: 1.25;
   }
   body[data-screen-label="Riqualificazione Energetica"] .target-card__desc {
     font-size: 0.95rem !important;
     line-height: 1.55 !important;
+    margin: 0;
   }
 
-/* ESAGONO - palette dedicata */
+  /* ---------- ESAGONO — palette dedicata ---------- */
   .esag-section {
     --esag-petrol: #2f4862;
     --esag-orange: #f27911;
@@ -305,6 +355,15 @@
     max-width: 720px;
     margin: 0 auto 56px;
   }
+  .esag-header .h-2 {
+    margin: 14px 0 0;
+  }
+  .esag-header .lead {
+    margin: 18px auto 0;
+    max-width: 56ch;
+  }
+
+  /* DESKTOP — layout absolute con SVG */
   .esag-wrap {
     position: relative;
     width: 100%;
@@ -461,38 +520,15 @@
     color: rgba(255, 255, 255, 0.88);
   }
 
-  .esag-card[data-pos="1"] {
-    top: 6%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .esag-card[data-pos="1"]:hover {
-    transform: translateX(-50%) translateY(-4px);
-  }
-  .esag-card[data-pos="2"] {
-    top: 30%;
-    right: 2%;
-  }
-  .esag-card[data-pos="3"] {
-    bottom: 30%;
-    right: 2%;
-  }
-  .esag-card[data-pos="4"] {
-    bottom: 6%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .esag-card[data-pos="4"]:hover {
-    transform: translateX(-50%) translateY(-4px);
-  }
-  .esag-card[data-pos="5"] {
-    bottom: 30%;
-    left: 2%;
-  }
-  .esag-card[data-pos="6"] {
-    top: 30%;
-    left: 2%;
-  }
+  /* Posizionamento card desktop */
+  .esag-card[data-pos="1"] { top: 6%; left: 50%; transform: translateX(-50%); }
+  .esag-card[data-pos="1"]:hover { transform: translateX(-50%) translateY(-4px); }
+  .esag-card[data-pos="2"] { top: 30%; right: 2%; }
+  .esag-card[data-pos="3"] { bottom: 30%; right: 2%; }
+  .esag-card[data-pos="4"] { bottom: 6%; left: 50%; transform: translateX(-50%); }
+  .esag-card[data-pos="4"]:hover { transform: translateX(-50%) translateY(-4px); }
+  .esag-card[data-pos="5"] { bottom: 30%; left: 2%; }
+  .esag-card[data-pos="6"] { top: 30%; left: 2%; }
 
   .esag-card[data-pos="1"] { animation-delay: 0.15s; }
   .esag-card[data-pos="2"] { animation-delay: 0.25s; }
@@ -514,45 +550,57 @@
     animation-name: esag-enter-center;
   }
 
+  /* Tablet/Desktop piccolo */
   @media (max-width: 1100px) {
     .esag-wrap {
       max-width: 900px;
       aspect-ratio: 900 / 580;
     }
-    .esag-card {
-      width: 180px;
-    }
-    .esag-center {
-      width: 270px;
-      height: 270px;
-    }
-    .esag-center__title {
-      font-size: 1.5rem;
-    }
-    .esag-center__eyebrow {
-      font-size: 0.85rem;
-    }
+    .esag-card { width: 180px; }
+    .esag-center { width: 270px; height: 270px; }
+    .esag-center__title { font-size: 1.5rem; }
+    .esag-center__eyebrow { font-size: 0.85rem; }
   }
+
+  /* ============= MOBILE ESAGONO ============= */
   @media (max-width: 900px) {
-    .esag-section { padding: 60px 0; }
+    .esag-section {
+      padding: 56px 0;
+    }
+    .esag-header {
+      margin-bottom: 36px;
+    }
     .esag-wrap {
       aspect-ratio: auto;
-      max-width: 600px;
+      max-width: 100%;
     }
     .esag-svg { display: none; }
+
+    /* Esagono centrale più compatto */
     .esag-center {
       position: relative;
       top: auto;
       left: auto;
       transform: none;
-      width: 280px;
-      height: 280px;
-      margin: 0 auto 40px;
+      width: 240px;
+      height: 240px;
+      margin: 0 auto 32px;
+      padding: 24px;
     }
+    .esag-center__title {
+      font-size: 1.35rem;
+    }
+    .esag-center__eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.24em;
+      margin-bottom: 12px;
+    }
+
+    /* Card in lista verticale piena larghezza */
     .esag-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
     .esag-card {
       position: relative;
@@ -564,42 +612,230 @@
       width: 100%;
       opacity: 1;
       animation: none;
+      padding: 16px 16px 16px 22px;
     }
     .esag-card[data-pos="1"]:hover,
     .esag-card[data-pos="4"]:hover,
     .esag-card:hover {
-      transform: translateY(-4px) !important;
+      transform: translateY(-2px) !important;
     }
+    /* Su mobile la descrizione è sempre visibile (no hover su touch) */
     .esag-card__desc {
-      max-height: 60px;
-      opacity: 0.9;
+      max-height: 100px;
+      opacity: 0.85;
       margin-top: 6px;
     }
-  }
-  @media (max-width: 520px) {
-    .esag-cards-grid {
-      grid-template-columns: 1fr;
+    .esag-card__title {
+      font-size: 1.05rem;
     }
-    .esag-center {
-      width: 220px;
-      height: 220px;
-    }
-    .esag-center__title {
-      font-size: 1.2rem;
-    }
-    .esag-center__eyebrow {
-      font-size: 0.75rem;
+    .esag-card__num {
+      font-size: 0.7rem;
     }
   }
 
+  /* Smartphone piccoli */
+  @media (max-width: 520px) {
+    .esag-center {
+      width: 210px;
+      height: 210px;
+      margin-bottom: 28px;
+    }
+    .esag-center__title {
+      font-size: 1.15rem;
+    }
+    .esag-center__eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+    }
+    .esag-card {
+      padding: 14px 14px 14px 20px;
+    }
+    .esag-card__title {
+      font-size: 1rem;
+    }
+    .esag-card__desc {
+      font-size: 0.8rem;
+    }
+  }
+
+  /* ---------- FAQ ---------- */
   body[data-screen-label="Riqualificazione Energetica"] #faq .container {
     max-width: 920px !important;
   }
+  body[data-screen-label="Riqualificazione Energetica"] #faq .section-head {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  /* ---------- "PERCHE" facts ---------- */
+  body[data-screen-label="Riqualificazione Energetica"] #perche .section-head {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 48px;
+  }
   body[data-screen-label="Riqualificazione Energetica"] #perche .facts {
-    gap: 32px;
+    gap: 24px;
+  }
+
+  /* ---------- BONUS ---------- */
+  body[data-screen-label="Riqualificazione Energetica"] #bonus .section-head {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 0;
   }
   body[data-screen-label="Riqualificazione Energetica"] #bonus .bonuses {
-    gap: 14px;
+    gap: 12px;
+  }
+  body[data-screen-label="Riqualificazione Energetica"] #bonus .bonus {
+    padding: 14px 22px;
+    font-size: 15px;
+  }
+
+  /* ---------- DIRETTIVA ---------- */
+  body[data-screen-label="Riqualificazione Energetica"] #direttiva .h-2 {
+    margin-top: 18px;
+  }
+  body[data-screen-label="Riqualificazione Energetica"] #direttiva .lead {
+    margin-top: 22px;
+  }
+
+  /* =============================================================
+     MOBILE — fix layout globale
+     ============================================================= */
+  @media (max-width: 820px) {
+    /* Page hero più compatto */
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero {
+      padding-top: calc(var(--header-h) + 40px);
+      padding-bottom: 56px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero__title {
+      font-size: clamp(1.9rem, 7vw, 2.4rem);
+      margin-top: 16px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero__sub {
+      margin-top: 18px;
+      font-size: 1rem;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero__crumbs {
+      margin-bottom: 20px;
+    }
+
+    /* Sezioni più strette in alto/basso */
+    body[data-screen-label="Riqualificazione Energetica"] .section {
+      padding-top: 56px;
+      padding-bottom: 56px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .section h2,
+    body[data-screen-label="Riqualificazione Energetica"] .section .h-2 {
+      font-size: clamp(1.55rem, 5.5vw, 2rem);
+    }
+
+    /* "Cosa significa" — stack verticale, immagine sotto */
+    body[data-screen-label="Riqualificazione Energetica"] #cosa-significa .container {
+      grid-template-columns: 1fr !important;
+      gap: 32px !important;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] #cosa-significa .reveal:last-child {
+      aspect-ratio: 16/10 !important;
+      order: 2;
+    }
+
+    /* "Per chi" — colonna unica */
+    body[data-screen-label="Riqualificazione Energetica"] #per-chi .targets {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .target-card {
+      padding: 24px 22px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .target-card__head {
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .target-card__icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    /* Bonus chip — pulsanti più compatti */
+    body[data-screen-label="Riqualificazione Energetica"] #bonus .section-head,
+    body[data-screen-label="Riqualificazione Energetica"] #perche .section-head {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] #bonus .bonus {
+      padding: 12px 16px;
+      font-size: 14px;
+      gap: 10px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] #bonus .bonus__pct {
+      font-size: 12px;
+      padding: 3px 8px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .bonus-foot {
+      margin-top: 24px;
+    }
+
+    /* Facts (Perché GDS) — colonna unica con spaziatura ridotta */
+    body[data-screen-label="Riqualificazione Energetica"] #perche .facts {
+      gap: 14px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .fact {
+      padding: 28px 24px;
+    }
+
+    /* FAQ — padding ridotto */
+    body[data-screen-label="Riqualificazione Energetica"] .faq__q {
+      padding: 24px 0;
+      gap: 16px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .faq__body-inner {
+      padding-bottom: 24px;
+      font-size: 15px;
+    }
+
+    /* CTA finale — testo e spaziatura più contenuti */
+    body[data-screen-label="Riqualificazione Energetica"] .final-cta {
+      padding: 64px 0;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .final-cta h2 {
+      font-size: clamp(1.9rem, 7vw, 2.6rem);
+      margin-bottom: 18px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .final-cta p {
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .final-cta__actions {
+      flex-direction: column;
+      gap: 18px;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .final-cta .btn {
+      width: 100%;
+      max-width: 320px;
+    }
+  }
+
+  /* Smartphone piccoli — ulteriori limature */
+  @media (max-width: 480px) {
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero__title {
+      font-size: clamp(1.7rem, 8vw, 2.1rem);
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero .btn,
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero a.btn {
+      width: 100%;
+      max-width: 320px;
+      justify-content: center;
+    }
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero > .container > div[style*="display:flex"],
+    body[data-screen-label="Riqualificazione Energetica"] .page-hero__inner > div:last-child {
+      flex-direction: column !important;
+      gap: 12px !important;
+    }
   }
 </style>
 </head>
@@ -650,8 +886,8 @@
 <section class="section" id="direttiva">
   <div class="container" style="max-width:920px;">
     <span class="eyebrow eyebrow-large">Il contesto normativo</span>
-    <h2 class="h-2" style="margin-top:22px;">Cosa cambia entro il 2030 (e perché conviene muoversi adesso).</h2>
-    <p class="lead" style="margin-top:22px;">
+    <h2 class="h-2">Cosa cambia entro il 2030 (e perché conviene muoversi adesso).</h2>
+    <p class="lead">
       La Direttiva europea 2024/1275, conosciuta come <strong>Direttiva Case Green</strong>, ha già definito il futuro del patrimonio edilizio italiano: <strong>riduzione del 16% del consumo energetico medio entro il 2030</strong>, ulteriore taglio del 20-22% entro il 2035, emissioni zero entro il 2050.
     </p>
     <p style="margin-top:16px;">
@@ -661,10 +897,10 @@
 </section>
 
 <section class="section section--off" id="cosa-significa">
-  <div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+  <div class="container">
     <div class="prose reveal">
       <span class="eyebrow eyebrow-large">Definizione</span>
-      <h2 style="margin-top:16px;">Cosa significa<br/>riqualificare energeticamente.</h2>
+      <h2>Cosa significa<br/>riqualificare energeticamente.</h2>
       <p>Riqualificare un immobile significa <strong>ridurre i consumi necessari a riscaldarlo, raffrescarlo e illuminarlo</strong> attraverso un mix coordinato di interventi sull'involucro e sugli impianti.</p>
       <p>Il risultato si misura in <strong>classe energetica</strong> e in <strong>kWh/m² annui</strong>. Un'abitazione passata dalla classe G alla A può ridurre la spesa energetica del 60-70% e aumentare il valore di mercato del 20-30%.</p>
     </div>
@@ -676,12 +912,13 @@
 
 <section class="section" id="per-chi">
   <div class="container">
-    <header class="section-head reveal" style="margin-bottom:40px;">
+    <header class="section-head reveal">
       <div>
         <span class="eyebrow eyebrow-large">A chi serve</span>
+        <h2 class="h-2 section-head__title" style="margin-top:16px;">Per privati, condomini e aziende.</h2>
       </div>
-      <p class="lead section-head__intro" style="margin-top:8px;">
-        Privati, amministratori di condominio e aziende: stesse competenze, processo adattato al singolo contesto.
+      <p class="lead section-head__intro">
+        Stesse competenze, processo adattato al singolo contesto: case, edifici plurifamiliari e immobili produttivi.
       </p>
     </header>
 
@@ -732,20 +969,20 @@
   <div class="container">
     <div class="esag-header reveal">
       <span class="eyebrow eyebrow-large" style="display:block;margin-bottom:14px;">Cosa facciamo</span>
-      <h2 class="h-2" style="margin:0;">Sei aree, un sistema integrato.</h2>
-      <p class="lead" style="margin-top:18px;">Una riqualificazione efficace non è un singolo intervento. Passa il mouse su ciascuna area per scoprirla.</p>
+      <h2 class="h-2">Sei aree, un sistema integrato.</h2>
+      <p class="lead">Una riqualificazione efficace non è un singolo intervento. Passa il mouse su ciascuna area per scoprirla.</p>
     </div>
 
     <div class="esag-wrap" role="group" aria-label="Diagramma interattivo degli interventi">
 
     <svg class="esag-svg" viewBox="0 0 1100 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-  <line class="esag-line" x1="550" y1="160" x2="550" y2="80"/>
-  <line class="esag-line" x1="690" y1="240" x2="880" y2="220"/>
-  <line class="esag-line" x1="690" y1="360" x2="880" y2="380"/>
-  <line class="esag-line" x1="550" y1="440" x2="550" y2="520"/>
-  <line class="esag-line" x1="410" y1="360" x2="220" y2="380"/>
-  <line class="esag-line" x1="410" y1="240" x2="220" y2="220"/>
-</svg>
+      <line class="esag-line" x1="550" y1="160" x2="550" y2="80"/>
+      <line class="esag-line" x1="690" y1="240" x2="880" y2="220"/>
+      <line class="esag-line" x1="690" y1="360" x2="880" y2="380"/>
+      <line class="esag-line" x1="550" y1="440" x2="550" y2="520"/>
+      <line class="esag-line" x1="410" y1="360" x2="220" y2="380"/>
+      <line class="esag-line" x1="410" y1="240" x2="220" y2="220"/>
+    </svg>
 
       <div class="esag-center">
         <div class="esag-center__inner">
@@ -799,7 +1036,7 @@
     <header class="section-head reveal">
       <div>
         <span class="eyebrow eyebrow-large">Detrazioni 2026</span>
-        <h2 class="h-2 section-head__title" style="margin-top:22px">
+        <h2 class="h-2 section-head__title" style="margin-top:18px">
           I bonus fiscali<br/>che ti aiutiamo a sfruttare.
         </h2>
       </div>
@@ -829,7 +1066,7 @@
     <header class="section-head reveal">
       <div>
         <span class="eyebrow eyebrow-large">Perché GDS Lavori</span>
-        <h2 class="h-2 section-head__title" style="margin-top:22px">
+        <h2 class="h-2 section-head__title" style="margin-top:18px">
           Facciamo riqualificazioni<br/>da prima che si chiamassero così.
         </h2>
       </div>
@@ -838,7 +1075,7 @@
       </p>
     </header>
 
-    <div class="facts reveal-stagger" style="margin-top:48px;">
+    <div class="facts reveal-stagger" style="margin-top:40px;">
       <article class="fact">
         <span class="fact__num">01 — Esperienza</span>
         <h3>Dal 1985 in cantiere.</h3>
@@ -863,13 +1100,13 @@
     <header class="section-head reveal">
       <div>
         <span class="eyebrow eyebrow-large">Domande frequenti</span>
-        <h2 class="h-2 section-head__title" style="margin-top:22px">
+        <h2 class="h-2 section-head__title" style="margin-top:18px">
           Le domande<br/>che ci fate più spesso:
         </h2>
       </div>
     </header>
 
-    <div class="faq reveal" style="margin-top:40px;">
+    <div class="faq reveal" style="margin-top:32px;">
 
       <div class="faq__item">
         <button class="faq__q" aria-expanded="false">
