@@ -308,14 +308,34 @@ h1,h2,h3,h4{ font-family:var(--ff-display); font-weight:700; letter-spacing:-.01
 /* ================================================================
    Urgenza (01/02/03)
    ================================================================ */
-.urgency{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
-@media (max-width:880px){ .urgency{ grid-template-columns:1fr; } }
-.ucard{ background:#fff; border:1px solid var(--gray-line); border-radius:8px; padding:34px 30px; display:flex; flex-direction:column; gap:14px; position:relative; overflow:hidden; }
+.urgency{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+@media (max-width:1080px){ .urgency{ grid-template-columns:1fr 1fr; } }
+@media (max-width:560px){ .urgency{ grid-template-columns:1fr; } }
+.ucard{ background:#fff; border:1px solid var(--gray-line); border-radius:8px; padding:30px 26px; display:flex; flex-direction:column; gap:10px; position:relative; overflow:hidden; }
 .ucard::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--orange); }
-.ucard__num{ font-family:var(--ff-display); font-weight:800; font-size:13px; letter-spacing:.08em; color:var(--orange); }
-.ucard__title{ font-family:var(--ff-display); font-weight:700; font-size:21px; color:var(--petrol); line-height:1.2; }
-.ucard__text{ font-size:15px; line-height:1.62; color:#465563; }
+.ucard__num{ font-family:var(--ff-display); font-weight:800; font-size:12px; letter-spacing:.08em; color:var(--gray); }
+.ucard__icon{ width:42px; height:42px; color:var(--orange); margin:4px 0 6px; }
+.ucard__stat{ font-family:var(--ff-display); font-weight:800; font-size:clamp(34px,3.4vw,44px); line-height:1; letter-spacing:-.02em; color:var(--orange); font-variant-numeric:tabular-nums; }
+.ucard__stat small{ font-size:.5em; margin-left:2px; }
+.ucard__title{ font-family:var(--ff-display); font-weight:700; font-size:17px; color:var(--petrol); line-height:1.25; margin-top:4px; }
+.ucard__text{ font-size:14px; line-height:1.6; color:#465563; }
 .ucard__text strong{ color:var(--petrol); font-weight:600; }
+.ucard__source{ margin-top:auto; padding-top:12px; font-size:11px; color:var(--gray); letter-spacing:.02em; }
+
+/* --- icone animate --- */
+@media (prefers-reduced-motion:no-preference){
+  .ico-drop{ animation:icoDrop 2.4s ease-in-out infinite; }
+  .ico-rise{ animation:icoRise 2.4s ease-in-out infinite; }
+  .ico-flame{ transform-origin:24px 40px; animation:icoFlame 1.6s ease-in-out infinite; }
+  .ico-flame-core{ transform-origin:24px 40px; animation:icoFlame 1.6s ease-in-out .25s infinite; }
+  .ico-rays{ transform-origin:24px 24px; animation:icoSpin 14s linear infinite; }
+  .ico-sun{ transform-origin:24px 24px; animation:icoPulse 3s ease-in-out infinite; }
+}
+@keyframes icoDrop{ 0%,100%{ transform:translateY(0); opacity:1; } 50%{ transform:translateY(4px); opacity:.55; } }
+@keyframes icoRise{ 0%,100%{ transform:translateY(0); opacity:1; } 50%{ transform:translateY(-4px); opacity:.55; } }
+@keyframes icoFlame{ 0%,100%{ transform:scaleY(1) scaleX(1); } 45%{ transform:scaleY(1.08) scaleX(.95); } }
+@keyframes icoSpin{ to{ transform:rotate(360deg); } }
+@keyframes icoPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.07); } }
 
 /* ================================================================
    Target (3 colonne)
