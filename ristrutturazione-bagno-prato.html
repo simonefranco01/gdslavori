@@ -214,7 +214,7 @@
     min-height:560px;
     overflow:hidden;
     background:var(--navy-site);
-    --zoom:1; --shutter:0; --lift:0;
+    --zoom:1; --shutter-top:23%; --shutter-bottom:77%; --lift:0;
   }
 
   .hero-photo-wrap{
@@ -238,16 +238,21 @@
     background:linear-gradient(180deg, rgba(16,38,57,.12) 0%, rgba(16,38,57,.5) 55%, rgba(16,38,57,.93) 100%);
   }
 
-  /* Chiusura: un pannello che cresce dalla stessa linea di livella dell'apertura
-     (23% dall'alto) fino a coprire tutta la scena — l'eco esatta della cerniera
-     con cui la ripresa si è aperta, non una dissolvenza a bianco. */
+  /* Chiusura: la foto "dopo" cresce dalla stessa linea di livella dell'apertura
+     (23% dall'alto) e prende il posto della foto "prima" — la trasformazione del
+     bagno si vede accadere mentre si scorre. Ritaglio (clip-path), non scala: una
+     transform:scale qui stirerebbe la foto invece di rivelarla. */
   .hero-shutter{
     position:absolute; inset:0;
     z-index:5;
-    background:var(--navy-site);
-    transform:scaleY(var(--shutter,0));
-    transform-origin:center 23%;
+    overflow:hidden;
+    clip-path:inset(var(--shutter-top,23%) 0 var(--shutter-bottom,77%) 0);
     pointer-events:none;
+  }
+  .hero-shutter-photo{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
   }
 
   .hero-tick{
@@ -353,13 +358,14 @@
       height:auto !important; min-height:0 !important;
       opacity:1 !important; transform:none !important;
     }
-    .hero-photo-wrap{
-      position:relative !important; height:46vh !important; min-height:260px !important;
-      animation:none !important; clip-path:inset(0) !important;
-    }
-    .hero-photo{ transform:none !important; }
+    /* Senza animazione non c'è scroll che riveli la trasformazione: niente "prima" a vista,
+       si mostra subito e solo il risultato finito, come richiesto per l'hero. */
+    .hero-photo-wrap{ display:none !important; }
     .hero-scrim{ display:none !important; }
-    .hero-shutter{ display:none !important; }
+    .hero-shutter{
+      position:relative !important; height:46vh !important; min-height:260px !important;
+      clip-path:none !important; overflow:hidden !important;
+    }
     .hero-tick,.hero-level-line,.hero-slate,.hero-brand-mark-wrap{ animation:none !important; opacity:1 !important; transform:none !important; }
     .hero-copy{ position:relative !important; height:auto !important; padding:28px 20px 0 !important; max-width:none !important; transform:none !important; }
     .hero-copy .eyebrow,.hero h1,.hero-sub,.hero-cta{ animation:none !important; opacity:1 !important; transform:none !important; }
@@ -747,10 +753,12 @@
 <section class="hero-scene" id="heroScene">
   <div class="hero" id="hero">
     <div class="hero-photo-wrap">
-      <img class="hero-photo" src="assets/img/bagno-finito-prato.jpg" width="1600" height="1000" alt="Bagno ristrutturato a Prato, finiture complete">
+      <img class="hero-photo" src="assets/img/bagno-prato-prima.jpg" width="1600" height="1000" alt="Bagno prima della ristrutturazione, pavimento e sanitari datati">
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
-    <div class="hero-shutter" aria-hidden="true"></div>
+    <div class="hero-shutter" aria-hidden="true">
+      <img class="hero-shutter-photo" src="assets/img/bagno-prato-dopo.jpg" alt="" width="1600" height="1000">
+    </div>
     <span class="hero-tick hero-tick--tl" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--tr" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--bl" aria-hidden="true"></span>
@@ -1096,11 +1104,12 @@
   /* ---- Hero: scena fissata, scroll-linked ----
      .hero-scene tiene la corsa di scroll (170vh); .hero (sticky) resta agganciato
      in cima per tutta quella corsa. Mentre si scorre: leggero zoom in avanti sulla
-     foto (--zoom), poi nell'ultima metà un pannello (--shutter) cresce dalla stessa
-     linea di livella con cui la foto si era aperta, chiudendo la scena — mentre il
-     testo si solleva leggermente (--lift) e vi scompare sotto. L'unico "taglio" della
-     pagina è mascherato dal movimento, non da uno stacco netto. Un solo rAF-loop,
-     attivo solo mentre la scena è nel viewport: niente librerie. */
+     foto "prima" (--zoom), poi nell'ultima metà la foto "dopo" cresce in ritaglio
+     (--shutter-top/--shutter-bottom) dalla stessa linea di livella con cui si era
+     aperta la scena, prendendo il posto della foto "prima" — la trasformazione del
+     bagno si vede accadere mentre si scorre, non solo a parole. Il testo intanto si
+     solleva leggermente (--lift) e vi scompare sotto. Un solo rAF-loop, attivo solo
+     mentre la scena è nel viewport: niente librerie. */
   var heroScene = document.getElementById('heroScene');
   var heroStage = document.getElementById('hero');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1118,8 +1127,10 @@
       var zoom = 1 + p * 0.08;
       var exit = clamp((p - 0.5) / 0.5, 0, 1);
       var exitEase = exit * exit * (3 - 2 * exit); /* smoothstep: chiusura morbida, non lineare */
+      var remain = 1 - exitEase; /* quota di ritaglio ancora nascosta, si azzera a scena chiusa */
       heroStage.style.setProperty('--zoom', zoom.toFixed(4));
-      heroStage.style.setProperty('--shutter', exitEase.toFixed(4));
+      heroStage.style.setProperty('--shutter-top', (23 * remain).toFixed(2) + '%');
+      heroStage.style.setProperty('--shutter-bottom', (77 * remain).toFixed(2) + '%');
       heroStage.style.setProperty('--lift', (exitEase * -40).toFixed(2));
     }
     function onHeroScroll(){
