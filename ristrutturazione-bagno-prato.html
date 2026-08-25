@@ -289,6 +289,8 @@
     animation-delay:.75s;
   }
   .hero-slate span{ background:rgba(16,38,57,.55); padding:3px 8px; }
+  .hero-slate-brand{ display:inline-flex; align-items:center; gap:6px; }
+  .hero-logo-mark{ width:14px; height:14px; object-fit:contain; }
 
   .hero-copy{
     position:relative; z-index:3;
@@ -702,6 +704,7 @@
   @media (min-width:768px){ footer{ padding-bottom:36px; } }
   footer strong{ color:var(--white); }
   footer a{ text-decoration:underline; }
+  .footer-logo{ height:32px; width:auto; margin-bottom:14px; display:block; }
 
   /* ============ STICKY MOBILE CTA ============ */
   .sticky-cta{
@@ -734,7 +737,7 @@
 <section class="hero-scene" id="heroScene">
   <div class="hero" id="hero">
     <div class="hero-photo-wrap">
-      <img class="hero-photo" src="img/bagno-finito-prato.jpg" width="1600" height="1000" alt="Bagno ristrutturato a Prato, finiture complete">
+      <img class="hero-photo" src="assets/img/bagno-finito-prato.jpg" width="1600" height="1000" alt="Bagno ristrutturato a Prato, finiture complete">
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-shutter" aria-hidden="true"></div>
@@ -743,7 +746,7 @@
     <span class="hero-tick hero-tick--bl" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--br" aria-hidden="true"></span>
     <span class="hero-level-line" aria-hidden="true"></span>
-    <p class="hero-slate" aria-hidden="true"><span>Prato, Toscana</span><span>Lavoro concluso</span></p>
+    <p class="hero-slate" aria-hidden="true"><span class="hero-slate-brand"><img src="assets/logo-gds-trimmed.png" alt="" width="14" height="14" class="hero-logo-mark">Prato, Toscana</span><span>Lavoro concluso</span></p>
 
     <div class="hero-copy">
       <p class="eyebrow">Impresa edile a Prato dal 1986</p>
@@ -765,8 +768,8 @@
     <p class="section-intro">Trascina per confrontare lo stato di partenza con il lavoro finito.</p>
 
     <div class="compare reveal">
-      <img class="compare-img" src="img/bagno-prato-prima.jpg" width="1000" height="750" alt="Bagno prima della ristrutturazione, pavimento e sanitari datati">
-      <img class="compare-img compare-after" id="compareAfter" src="img/bagno-prato-dopo.jpg" width="1000" height="750" alt="Bagno dopo la ristrutturazione, piastrelle e sanitari nuovi">
+      <img class="compare-img" src="assets/img/bagno-prato-prima.jpg" width="1000" height="750" alt="Bagno prima della ristrutturazione, pavimento e sanitari datati">
+      <img class="compare-img compare-after" id="compareAfter" src="assets/img/bagno-prato-dopo.jpg" width="1000" height="750" alt="Bagno dopo la ristrutturazione, piastrelle e sanitari nuovi">
       <span class="compare-label compare-label--before">Prima</span>
       <span class="compare-label compare-label--after">Dopo</span>
       <span class="compare-handle" id="compareHandle" aria-hidden="true"></span>
@@ -1019,6 +1022,7 @@
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="container">
+    <img src="assets/logo-gds-trimmed.png" alt="" aria-hidden="true" class="footer-logo">
     <p><strong>GDS Lavori S.R.L.</strong></p>
     <p>[DA INSERIRE: indirizzo sede], Prato (PO)</p>
     <p>Tel. 0574 202295 — Cell. 347 9053103 — <a href="mailto:mario@gdslavori.it">mario@gdslavori.it</a></p>
