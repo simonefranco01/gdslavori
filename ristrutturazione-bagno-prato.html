@@ -199,20 +199,25 @@
   .reveal-delay-3{ transition-delay:.3s; }
   .reveal-delay-4{ transition-delay:.4s; }
 
-  /* ============ FASCIA FISSA: logo + CTA, presente per tutto lo scroll ============ */
+  /* ============ FASCIA FISSA: logo + CTA, compare dopo l'hero ============ */
   /* Non è una barra di navigazione (nessun link ad altre pagine): solo il marchio e
-     un'unica call to action, sempre raggiungibile. Coerente con "un solo percorso". */
+     un'unica call to action, raggiungibile per il resto dello scroll. Resta fuori
+     dalla prima schermata apposta, per lasciare la foto dell'hero intera a vista;
+     compare insieme al FAB WhatsApp, stesso trigger. */
   .site-bar{
     position:fixed; top:0; left:0; right:0;
     z-index:60;
     height:var(--header-h);
     display:flex; align-items:center;
-    background:rgba(251,251,250,.92);
-    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
-    border-bottom:1px solid transparent;
-    transition:box-shadow .3s ease, border-color .3s ease;
+    background:var(--navy-site);
+    border-bottom:2px solid var(--orange);
+    box-shadow:0 10px 26px -16px rgba(16,38,57,.6);
+    opacity:0; transform:translateY(-100%);
+    pointer-events:none;
+    transition:transform .3s var(--ease), opacity .3s var(--ease);
   }
-  .site-bar.is-scrolled{ border-bottom-color:var(--gray-line,rgba(159,165,171,.35)); box-shadow:0 8px 24px -18px rgba(16,38,57,.5); }
+  .site-bar.is-visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  @media (prefers-reduced-motion: reduce){ .site-bar{ transition:opacity .2s linear; } }
   .site-bar__inner{
     width:100%; max-width:var(--container); margin:0 auto; padding:0 20px;
     display:flex; align-items:center; justify-content:space-between; gap:16px;
@@ -289,8 +294,8 @@
     z-index:2;
     animation:tick-in .5s var(--ease) forwards;
   }
-  .hero-tick--tl{ top:calc(var(--header-h) + 20px); left:20px; border-width:2px 0 0 2px; animation-delay:.05s; }
-  .hero-tick--tr{ top:calc(var(--header-h) + 20px); right:20px; border-width:2px 2px 0 0; animation-delay:.15s; }
+  .hero-tick--tl{ top:20px; left:20px; border-width:2px 0 0 2px; animation-delay:.05s; }
+  .hero-tick--tr{ top:20px; right:20px; border-width:2px 2px 0 0; animation-delay:.15s; }
   .hero-tick--bl{ bottom:20px; left:20px; border-width:0 0 2px 2px; animation-delay:.15s; }
   .hero-tick--br{ bottom:20px; right:20px; border-width:0 2px 2px 0; animation-delay:.25s; }
   @keyframes tick-in{ from{ opacity:0; } to{ opacity:1; } }
@@ -309,7 +314,7 @@
   @keyframes level-sweep{ to{ transform:scaleX(1); } }
 
   .hero-slate{
-    position:absolute; top:calc(var(--header-h) + 20px); left:52px; right:52px;
+    position:absolute; top:20px; left:52px; right:52px;
     display:flex; justify-content:space-between;
     font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
     color:rgba(255,255,255,.85);
@@ -1122,16 +1127,7 @@
 (function(){
   "use strict";
 
-  /* ---- Fascia fissa: ombra/bordo quando si scorre oltre l'hero ---- */
   var siteBar = document.getElementById('siteBar');
-  if (siteBar){
-    var onBarScroll = function(){
-      if (window.scrollY > 12) siteBar.classList.add('is-scrolled');
-      else siteBar.classList.remove('is-scrolled');
-    };
-    onBarScroll();
-    window.addEventListener('scroll', onBarScroll, { passive: true });
-  }
 
   /* ---- GCLID: cattura il parametro dall'URL e lo salva nel campo nascosto ---- */
   try{
@@ -1214,7 +1210,8 @@
     updateHeroScene();
   }
 
-  /* ---- Barra CTA sticky su mobile + FAB WhatsApp: visibili dopo l'intera scena hero ---- */
+  /* ---- Barra fissa + FAB WhatsApp + barra sticky mobile: compaiono insieme dopo
+     l'intera scena hero, cosicché nella prima schermata la foto resti intera a vista ---- */
   var stickyCta = document.getElementById('stickyCta');
   var waFab = document.querySelector('.wa-fab');
   if (heroScene && 'IntersectionObserver' in window){
@@ -1223,15 +1220,18 @@
         if (entry.isIntersecting){
           if (stickyCta) stickyCta.classList.remove('is-visible');
           if (waFab) waFab.classList.remove('is-visible');
+          if (siteBar) siteBar.classList.remove('is-visible');
         } else {
           if (stickyCta) stickyCta.classList.add('is-visible');
           if (waFab) waFab.classList.add('is-visible');
+          if (siteBar) siteBar.classList.add('is-visible');
         }
       });
     }, { threshold: 0 });
     heroIo.observe(heroScene);
-  } else if (waFab) {
-    waFab.classList.add('is-visible');
+  } else {
+    if (waFab) waFab.classList.add('is-visible');
+    if (siteBar) siteBar.classList.add('is-visible');
   }
 })();
 </script>
