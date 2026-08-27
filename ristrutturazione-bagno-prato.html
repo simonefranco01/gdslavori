@@ -859,7 +859,7 @@
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-shutter" aria-hidden="true">
-      <video class="hero-shutter-photo" width="1920" height="1080" poster="assets/img/bagno-prato-prima.jpg.png" autoplay muted loop playsinline aria-hidden="true">
+      <video class="hero-shutter-photo" id="heroShutterVideo" width="1920" height="1080" poster="assets/img/bagno-prato-prima.jpg.png" muted loop playsinline aria-hidden="true">
         <source src="assets/bagno-vecchio-verticale.mp4.mp4" media="(max-width: 899px)" type="video/mp4">
         <source src="assets/bagno-vecchio.mp4.mp4" type="video/mp4">
       </video>
@@ -1241,6 +1241,7 @@
   if (heroScene && heroStage && !reduceMotion){
     var heroTicking = false;
     var heroFlipped = false;
+    var heroShutterVideo = document.getElementById('heroShutterVideo');
     function updateHeroScene(){
       heroTicking = false;
       var total = heroScene.offsetHeight - window.innerHeight;
@@ -1257,11 +1258,17 @@
       heroStage.style.setProperty('--lift', (exitEase * -40).toFixed(2));
 
       /* Scambio netto delle due scritte, indipendente dalla dissolvenza della foto —
-         scrive in DOM solo quando lo stato cambia davvero, non ad ogni frame. */
+         scrive in DOM solo quando lo stato cambia davvero, non ad ogni frame. Il
+         video "vecchio" parte esattamente in questo istante, non da subito: prima
+         di questo punto resta fermo sul poster. */
       var shouldFlip = exitEase >= 0.5;
       if (shouldFlip !== heroFlipped){
         heroFlipped = shouldFlip;
         heroStage.classList.toggle('is-flipped', heroFlipped);
+        if (heroShutterVideo){
+          if (heroFlipped){ heroShutterVideo.currentTime = 0; heroShutterVideo.play().catch(function(){}); }
+          else { heroShutterVideo.pause(); }
+        }
       }
     }
     function onHeroScroll(){
