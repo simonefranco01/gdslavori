@@ -270,7 +270,7 @@
     position:absolute; inset:0;
     width:100%; height:100%;
     object-fit:cover;
-    color:transparent; font-size:0; /* nasconde l'icona/alt di rottura finché manca la foto reale */
+    background:var(--navy-brand); /* colore di fondo finché il video non è pronto */
     transform:scale(var(--zoom,1));
   }
 
@@ -302,25 +302,29 @@
   .hero-bubble{
     position:absolute;
     left:50%; top:14%;
-    transform:translate(-50%,-50%) rotate(-2deg);
-    z-index:6; /* sopra sia la foto base sia l'otturatore (z-index:5): lo scambio è indipendente dal ritaglio */
+    transform:translate(-50%,-50%);
+    z-index:6; /* sopra sia la foto base sia l'otturatore (z-index:5): lo scambio è indipendente dalla dissolvenza */
+    display:flex; flex-direction:row; align-items:flex-start; gap:2px;
     font-family:'Architects Daughter', cursive;
     font-style:italic;
-    font-size:clamp(13px,3.6vw,21px);
+    font-size:clamp(16px,4.4vw,26px);
     line-height:1;
     text-align:center;
     white-space:nowrap;
     color:#fff;
-    -webkit-text-stroke:1.6px var(--orange);
+    -webkit-text-stroke:1.7px var(--orange);
     paint-order:stroke fill;
     text-shadow:1.5px 1.5px 0 var(--orange), -1.5px -1.5px 0 var(--orange), 1.5px -1.5px 0 var(--orange), -1.5px 1.5px 0 var(--orange), 0 4px 10px rgba(0,0,0,.4);
     pointer-events:none;
     opacity:1;
     transition:opacity .2s ease;
   }
-  .hero-bubble--reality{ transform:translate(-50%,-50%) rotate(1.5deg); opacity:0; }
+  .hero-bubble--reality{ opacity:0; }
   .hero.is-flipped .hero-bubble--dream{ opacity:0; }
   .hero.is-flipped .hero-bubble--reality{ opacity:1; }
+  .hero-bubble__arrow{ width:30px; height:42px; flex:none; margin-top:14px; margin-left:8px; overflow:visible; transform:scaleX(-1); }
+  .hero-bubble__arrow-tail{ fill:none; stroke:var(--orange); stroke-width:6; stroke-linecap:round; }
+  .hero-bubble__arrow-head{ fill:var(--orange); }
   @media (prefers-reduced-motion: reduce){ .hero-bubble{ transition:none; } }
 
   .hero-tick{
@@ -337,19 +341,6 @@
   .hero-tick--bl{ bottom:20px; left:20px; border-width:0 0 2px 2px; animation-delay:.15s; }
   .hero-tick--br{ bottom:20px; right:20px; border-width:0 2px 2px 0; animation-delay:.25s; }
   @keyframes tick-in{ from{ opacity:0; } to{ opacity:1; } }
-
-  .hero-level-line{
-    position:absolute;
-    left:20px; right:20px; top:23%;
-    height:2px;
-    background:var(--orange);
-    transform:scaleX(0);
-    transform-origin:left center;
-    animation:level-sweep .7s var(--ease) forwards;
-    animation-delay:.15s;
-    z-index:2;
-  }
-  @keyframes level-sweep{ to{ transform:scaleX(1); } }
 
   .hero-slate{
     position:absolute; top:20px; left:52px; right:52px;
@@ -423,7 +414,7 @@
     .hero-scrim{ display:none !important; }
     .hero-shutter{ display:none !important; }
     .hero-bubble{ display:none !important; } /* la battuta funziona solo con lo scroll: senza, niente scritte */
-    .hero-tick,.hero-level-line,.hero-slate{ animation:none !important; opacity:1 !important; transform:none !important; }
+    .hero-tick,.hero-slate{ animation:none !important; opacity:1 !important; transform:none !important; }
     .hero-copy{ position:relative !important; height:auto !important; padding:28px 20px 0 !important; max-width:none !important; transform:none !important; }
     .hero-copy .eyebrow,.hero h1,.hero-sub,.hero-cta{ animation:none !important; opacity:1 !important; transform:none !important; }
   }
@@ -855,19 +846,29 @@
 <section class="hero-scene" id="heroScene">
   <div class="hero" id="hero">
     <div class="hero-photo-wrap">
-      <img class="hero-photo" src="assets/img/bagno-prato-dopo.jpg.png" width="1600" height="1000" alt="Bagno ristrutturato a Prato, finiture complete">
-      <span class="hero-bubble hero-bubble--dream" aria-hidden="true">vorresti un bagno come questo?</span>
+      <video class="hero-photo" width="1920" height="1080" poster="assets/img/bagno-prato-dopo.jpg.png" autoplay muted loop playsinline aria-label="Bagno ristrutturato a Prato, finiture complete">
+        <source src="assets/bagno-moderno-verticale.mp4.mp4" media="(max-width: 899px)" type="video/mp4">
+        <source src="assets/bagno-moderno.mp4.mp4" type="video/mp4">
+      </video>
+      <span class="hero-bubble hero-bubble--dream" aria-hidden="true">vorresti un bagno come questo
+        <svg class="hero-bubble__arrow" viewBox="0 0 40 54" aria-hidden="true">
+          <path class="hero-bubble__arrow-tail" d="M32 2 C6 8, 4 24, 18 36"/>
+          <path class="hero-bubble__arrow-head" d="M6 32 L28 28 L18 52 Z"/>
+        </svg>
+      </span>
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-shutter" aria-hidden="true">
-      <img class="hero-shutter-photo" src="assets/img/bagno-prato-prima.jpg.png" alt="" width="1600" height="1000">
+      <video class="hero-shutter-photo" width="1920" height="1080" poster="assets/img/bagno-prato-prima.jpg.png" autoplay muted loop playsinline aria-hidden="true">
+        <source src="assets/bagno-vecchio-verticale.mp4.mp4" media="(max-width: 899px)" type="video/mp4">
+        <source src="assets/bagno-vecchio.mp4.mp4" type="video/mp4">
+      </video>
     </div>
     <span class="hero-bubble hero-bubble--reality" aria-hidden="true">ma invece ne hai uno come questo</span>
     <span class="hero-tick hero-tick--tl" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--tr" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--bl" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--br" aria-hidden="true"></span>
-    <span class="hero-level-line" aria-hidden="true"></span>
     <p class="hero-slate" aria-hidden="true"><span>Prato, Toscana</span><span>Lavoro concluso</span></p>
 
     <div class="hero-copy">
@@ -1226,6 +1227,14 @@
   var heroScene = document.getElementById('heroScene');
   var heroStage = document.getElementById('hero');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* I due video di sfondo dell'hero rispettano prefers-reduced-motion: se attivo,
+     restano fermi sul poster (fotogramma statico) invece di girare in loop. */
+  if (reduceMotion){
+    document.querySelectorAll('.hero-photo, .hero-shutter-photo').forEach(function(v){
+      if (v.tagName === 'VIDEO'){ v.removeAttribute('autoplay'); v.pause(); }
+    });
+  }
 
   function clamp(v, min, max){ return Math.min(max, Math.max(min, v)); }
 
