@@ -14,7 +14,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@400;600&family=Architects+Daughter&display=swap" rel="stylesheet">
 
 <!-- Google tag (gtag.js) — GA4 + Google Ads, unico loader e unico blocco di config -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F5SQ826FX3"></script>
@@ -285,6 +285,34 @@
     object-fit:cover;
   }
 
+  /* Scritte "adesivo": stessa posizione, sopra la linea di livella. Sono staccate
+     dal ritaglio della foto (altrimenti il bordo del ritaglio, passando proprio da
+     lì vicino, taglierebbe la scritta a metà per un istante) — lo scroll le scambia
+     con uno scatto netto, non una dissolvenza legata al ritaglio. */
+  .hero-bubble{
+    position:absolute;
+    left:50%; top:14%;
+    transform:translate(-50%,-50%) rotate(-2deg);
+    z-index:6; /* sopra sia la foto base sia l'otturatore (z-index:5): lo scambio è indipendente dal ritaglio */
+    font-family:'Architects Daughter', cursive;
+    font-style:italic;
+    font-size:clamp(13px,3.6vw,21px);
+    line-height:1;
+    text-align:center;
+    white-space:nowrap;
+    color:#fff;
+    -webkit-text-stroke:1.6px var(--orange);
+    paint-order:stroke fill;
+    text-shadow:1.5px 1.5px 0 var(--orange), -1.5px -1.5px 0 var(--orange), 1.5px -1.5px 0 var(--orange), -1.5px 1.5px 0 var(--orange), 0 4px 10px rgba(0,0,0,.4);
+    pointer-events:none;
+    opacity:1;
+    transition:opacity .2s ease;
+  }
+  .hero-bubble--reality{ transform:translate(-50%,-50%) rotate(1.5deg); opacity:0; }
+  .hero.is-flipped .hero-bubble--dream{ opacity:0; }
+  .hero.is-flipped .hero-bubble--reality{ opacity:1; }
+  @media (prefers-reduced-motion: reduce){ .hero-bubble{ transition:none; } }
+
   .hero-tick{
     position:absolute;
     width:20px; height:20px;
@@ -378,12 +406,13 @@
     }
     /* Senza animazione non c'è scroll che riveli la trasformazione: niente "prima" a vista,
        si mostra subito e solo il risultato finito, come richiesto per l'hero. */
-    .hero-photo-wrap{ display:none !important; }
-    .hero-scrim{ display:none !important; }
-    .hero-shutter{
+    .hero-photo-wrap{
       position:relative !important; height:46vh !important; min-height:260px !important;
-      clip-path:none !important; overflow:hidden !important;
+      animation:none !important; clip-path:inset(0) !important;
     }
+    .hero-scrim{ display:none !important; }
+    .hero-shutter{ display:none !important; }
+    .hero-bubble{ display:none !important; } /* la battuta funziona solo con lo scroll: senza, niente scritte */
     .hero-tick,.hero-level-line,.hero-slate{ animation:none !important; opacity:1 !important; transform:none !important; }
     .hero-copy{ position:relative !important; height:auto !important; padding:28px 20px 0 !important; max-width:none !important; transform:none !important; }
     .hero-copy .eyebrow,.hero h1,.hero-sub,.hero-cta{ animation:none !important; opacity:1 !important; transform:none !important; }
@@ -813,12 +842,14 @@
 <section class="hero-scene" id="heroScene">
   <div class="hero" id="hero">
     <div class="hero-photo-wrap">
-      <img class="hero-photo" src="assets/img/bagno-prato-dopo.jpg.png" width="1600" height="1000" alt="Bagno prima della ristrutturazione, pavimento e sanitari datati">
+      <img class="hero-photo" src="assets/img/bagno-prato-prima.jpg.png" width="1600" height="1000" alt="Bagno ristrutturato a Prato, finiture complete">
+      <span class="hero-bubble hero-bubble--dream" aria-hidden="true">vorresti un bagno come questo?</span>
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-shutter" aria-hidden="true">
-      <img class="hero-shutter-photo" src="assets/img/bagno-prato-prima.jpg.png" alt="" width="1600" height="1000">
+      <img class="hero-shutter-photo" src="assets/img/bagno-prato-dopo.jpg.png" alt="" width="1600" height="1000">
     </div>
+    <span class="hero-bubble hero-bubble--reality" aria-hidden="true">ma invece ne hai uno come questo</span>
     <span class="hero-tick hero-tick--tl" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--tr" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--bl" aria-hidden="true"></span>
@@ -1187,6 +1218,7 @@
 
   if (heroScene && heroStage && !reduceMotion){
     var heroTicking = false;
+    var heroFlipped = false;
     function updateHeroScene(){
       heroTicking = false;
       var total = heroScene.offsetHeight - window.innerHeight;
@@ -1201,6 +1233,14 @@
       heroStage.style.setProperty('--shutter-top', (23 * remain).toFixed(2) + '%');
       heroStage.style.setProperty('--shutter-bottom', (77 * remain).toFixed(2) + '%');
       heroStage.style.setProperty('--lift', (exitEase * -40).toFixed(2));
+
+      /* Scambio netto delle due scritte, indipendente dal ritaglio della foto —
+         scrive in DOM solo quando lo stato cambia davvero, non ad ogni frame. */
+      var shouldFlip = exitEase >= 0.5;
+      if (shouldFlip !== heroFlipped){
+        heroFlipped = shouldFlip;
+        heroStage.classList.toggle('is-flipped', heroFlipped);
+      }
     }
     function onHeroScroll(){
       if (!heroTicking){ heroTicking = true; requestAnimationFrame(updateHeroScene); }
