@@ -305,16 +305,16 @@
     transform:translate(-50%,-50%);
     z-index:6; /* sopra sia la foto base sia l'otturatore (z-index:5): lo scambio è indipendente dalla dissolvenza */
     display:flex; flex-direction:row; align-items:flex-start; gap:2px;
-    font-family:'Architects Daughter', cursive;
-    font-style:italic;
-    font-size:clamp(16px,4.4vw,26px);
-    line-height:1;
+    font-family:var(--font-display);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:-.01em;
+    font-size:clamp(19px,5.4vw,33px);
+    line-height:1.05;
     text-align:center;
     white-space:nowrap;
-    color:#fff;
-    -webkit-text-stroke:1.7px var(--orange);
-    paint-order:stroke fill;
-    text-shadow:1.5px 1.5px 0 var(--orange), -1.5px -1.5px 0 var(--orange), 1.5px -1.5px 0 var(--orange), -1.5px 1.5px 0 var(--orange), 0 4px 10px rgba(0,0,0,.4);
+    color:var(--orange);
+    text-shadow:0 2px 4px rgba(16,38,57,.55), 0 1px 12px rgba(16,38,57,.35);
     pointer-events:none;
     opacity:1;
     transition:opacity .2s ease;
