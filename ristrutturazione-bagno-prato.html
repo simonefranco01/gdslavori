@@ -219,12 +219,23 @@
   .site-bar.is-visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
   @media (prefers-reduced-motion: reduce){ .site-bar{ transition:opacity .2s linear; } }
   .site-bar__inner{
-    width:100%; max-width:var(--container); margin:0 auto; padding:0 20px;
+    width:100%; max-width:1440px; margin:0 auto; padding:0 20px;
     display:flex; align-items:center; justify-content:space-between; gap:16px;
   }
-  @media (min-width:768px){ .site-bar__inner{ padding:0 40px; } }
-  .site-bar__logo{ height:30px; width:auto; display:block; }
-  .site-bar .btn{ padding:11px 18px; font-size:14px; min-height:auto; }
+  @media (min-width:768px){ .site-bar__inner{ padding:0 48px; } }
+  .site-bar__brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .site-bar__logo{ height:30px; width:auto; display:block; flex:none; }
+  .site-bar__brandtext{
+    display:flex; flex-direction:column; line-height:1.2;
+    font-family:var(--font-body); font-weight:600; font-size:13px;
+    color:var(--white); letter-spacing:.01em; white-space:nowrap;
+  }
+  .site-bar__brandtext small{
+    font-weight:400; font-size:10px; letter-spacing:.03em;
+    color:rgba(255,255,255,.65);
+  }
+  @media (max-width:480px){ .site-bar__brandtext{ display:none; } }
+  .site-bar .btn{ padding:11px 18px; font-size:14px; min-height:auto; flex:none; }
   @media (max-width:420px){ .site-bar .btn{ padding:10px 14px; font-size:13px; } }
 
   /* ============ HERO: SCENA FISSATA (pinned scroll scene, vanilla) ============ */
@@ -829,7 +840,10 @@
 <!-- ============ FASCIA FISSA: solo logo + CTA, nessun link ad altre pagine ============ -->
 <div class="site-bar" id="siteBar">
   <div class="site-bar__inner">
-    <img src="assets/logo-gds-trimmed.png" alt="GDS Lavori" class="site-bar__logo">
+    <div class="site-bar__brand">
+      <img src="assets/logo-gds-trimmed.png" alt="GDS Lavori" class="site-bar__logo">
+      <span class="site-bar__brandtext">GDS Lavori<small>Impresa edile dal 1986</small></span>
+    </div>
     <a href="#form" class="btn btn--primary">Sopralluogo gratuito</a>
   </div>
 </div>
@@ -842,12 +856,12 @@
 <section class="hero-scene" id="heroScene">
   <div class="hero" id="hero">
     <div class="hero-photo-wrap">
-      <img class="hero-photo" src="assets/img/bagno-prato-prima.jpg.png" width="1600" height="1000" alt="Bagno ristrutturato a Prato, finiture complete">
+      <img class="hero-photo" src="assets/img/bagno-prato-dopo.jpg.png" width="1600" height="1000" alt="Bagno ristrutturato a Prato, finiture complete">
       <span class="hero-bubble hero-bubble--dream" aria-hidden="true">vorresti un bagno come questo?</span>
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-shutter" aria-hidden="true">
-      <img class="hero-shutter-photo" src="assets/img/bagno-prato-dopo.jpg.png" alt="" width="1600" height="1000">
+      <img class="hero-shutter-photo" src="assets/img/bagno-prato-prima.jpg.png" alt="" width="1600" height="1000">
     </div>
     <span class="hero-bubble hero-bubble--reality" aria-hidden="true">ma invece ne hai uno come questo</span>
     <span class="hero-tick hero-tick--tl" aria-hidden="true"></span>
@@ -877,8 +891,8 @@
     <p class="section-intro">Trascina per confrontare lo stato di partenza con il lavoro finito.</p>
 
     <div class="compare reveal">
-      <img class="compare-img" src="assets/img/bagno-prato-dopo.jpg.png" width="1000" height="750" alt="Bagno prima della ristrutturazione, pavimento e sanitari datati">
-      <img class="compare-img compare-after" id="compareAfter" src="assets/img/bagno-prato-prima.jpg.png" width="1000" height="750" alt="Bagno dopo la ristrutturazione, piastrelle e sanitari nuovi">
+      <img class="compare-img" src="assets/img/bagno-prato-prima.jpg.png" width="1000" height="750" alt="Bagno prima della ristrutturazione, pavimento e sanitari datati">
+      <img class="compare-img compare-after" id="compareAfter" src="assets/img/bagno-prato-dopo.jpg.png" width="1000" height="750" alt="Bagno dopo la ristrutturazione, piastrelle e sanitari nuovi">
       <span class="compare-label compare-label--before">Prima</span>
       <span class="compare-label compare-label--after">Dopo</span>
       <span class="compare-handle" id="compareHandle" aria-hidden="true"></span>
