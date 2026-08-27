@@ -255,7 +255,7 @@
     min-height:560px;
     overflow:hidden;
     background:var(--navy-site);
-    --zoom:1; --shutter-top:23%; --shutter-bottom:77%; --lift:0;
+    --zoom:1; --zoom2:1.15; --fade:0; --lift:0;
   }
 
   .hero-photo-wrap{
@@ -279,21 +279,20 @@
     background:linear-gradient(180deg, rgba(16,38,57,.12) 0%, rgba(16,38,57,.5) 55%, rgba(16,38,57,.93) 100%);
   }
 
-  /* Chiusura: la foto "dopo" cresce dalla stessa linea di livella dell'apertura
-     (23% dall'alto) e prende il posto della foto "prima" — la trasformazione del
-     bagno si vede accadere mentre si scorre. Ritaglio (clip-path), non scala: una
-     transform:scale qui stirerebbe la foto invece di rivelarla. */
+  /* Chiusura: dissolvenza incrociata verso la foto "prima" — non un taglio netto.
+     Le due foto si muovono a velocità di zoom opposte (una entra, l'altra si posa)
+     per dare profondità alla sfumata, invece di una semplice opacità piatta. */
   .hero-shutter{
     position:absolute; inset:0;
     z-index:5;
-    overflow:hidden;
-    clip-path:inset(var(--shutter-top,23%) 0 var(--shutter-bottom,77%) 0);
+    opacity:var(--fade,0);
     pointer-events:none;
   }
   .hero-shutter-photo{
     position:absolute; inset:0;
     width:100%; height:100%;
     object-fit:cover;
+    transform:scale(var(--zoom2,1.15));
   }
 
   /* Scritte "adesivo": stessa posizione, sopra la linea di livella. Sono staccate
@@ -891,8 +890,8 @@
     <p class="section-intro">Trascina per confrontare lo stato di partenza con il lavoro finito.</p>
 
     <div class="compare reveal">
-      <img class="compare-img" src="assets/img/bagno-prato-prima.jpg.png" width="1000" height="750" alt="Bagno prima della ristrutturazione, pavimento e sanitari datati">
-      <img class="compare-img compare-after" id="compareAfter" src="assets/img/bagno-prato-dopo.jpg.png" width="1000" height="750" alt="Bagno dopo la ristrutturazione, piastrelle e sanitari nuovi">
+      <img class="compare-img" src="assets/img/bagno-prato-dopo.jpg.png" width="1000" height="750" alt="Bagno dopo la ristrutturazione, piastrelle e sanitari nuovi">
+      <img class="compare-img compare-after" id="compareAfter" src="assets/img/bagno-prato-prima.jpg.png" width="1000" height="750" alt="Bagno prima della ristrutturazione, pavimento e sanitari datati">
       <span class="compare-label compare-label--before">Prima</span>
       <span class="compare-label compare-label--after">Dopo</span>
       <span class="compare-handle" id="compareHandle" aria-hidden="true"></span>
@@ -1218,12 +1217,12 @@
   /* ---- Hero: scena fissata, scroll-linked ----
      .hero-scene tiene la corsa di scroll (170vh); .hero (sticky) resta agganciato
      in cima per tutta quella corsa. Mentre si scorre: leggero zoom in avanti sulla
-     foto "prima" (--zoom), poi nell'ultima metà la foto "dopo" cresce in ritaglio
-     (--shutter-top/--shutter-bottom) dalla stessa linea di livella con cui si era
-     aperta la scena, prendendo il posto della foto "prima" — la trasformazione del
-     bagno si vede accadere mentre si scorre, non solo a parole. Il testo intanto si
-     solleva leggermente (--lift) e vi scompare sotto. Un solo rAF-loop, attivo solo
-     mentre la scena è nel viewport: niente librerie. */
+     foto moderna (--zoom), poi nell'ultima metà la foto vecchia si dissolve sopra
+     (--fade) mentre si assesta da uno zoom più stretto al suo (--zoom2) — le due
+     velocità di zoom opposte danno profondità alla dissolvenza, non è una semplice
+     opacità piatta. Il testo intanto si solleva leggermente (--lift) e vi scompare
+     sotto. Un solo rAF-loop, attivo solo mentre la scena è nel viewport: niente
+     librerie. */
   var heroScene = document.getElementById('heroScene');
   var heroStage = document.getElementById('hero');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1241,14 +1240,14 @@
       var p = clamp(scrolled / total, 0, 1);
       var zoom = 1 + p * 0.08;
       var exit = clamp((p - 0.5) / 0.5, 0, 1);
-      var exitEase = exit * exit * (3 - 2 * exit); /* smoothstep: chiusura morbida, non lineare */
-      var remain = 1 - exitEase; /* quota di ritaglio ancora nascosta, si azzera a scena chiusa */
+      var exitEase = exit * exit * (3 - 2 * exit); /* smoothstep: dissolvenza morbida, non lineare */
+      var zoom2 = 1.15 - exitEase * 0.15; /* la foto vecchia entra più stretta e si assesta al suo posto */
       heroStage.style.setProperty('--zoom', zoom.toFixed(4));
-      heroStage.style.setProperty('--shutter-top', (23 * remain).toFixed(2) + '%');
-      heroStage.style.setProperty('--shutter-bottom', (77 * remain).toFixed(2) + '%');
+      heroStage.style.setProperty('--zoom2', zoom2.toFixed(4));
+      heroStage.style.setProperty('--fade', exitEase.toFixed(4));
       heroStage.style.setProperty('--lift', (exitEase * -40).toFixed(2));
 
-      /* Scambio netto delle due scritte, indipendente dal ritaglio della foto —
+      /* Scambio netto delle due scritte, indipendente dalla dissolvenza della foto —
          scrive in DOM solo quando lo stato cambia davvero, non ad ogni frame. */
       var shouldFlip = exitEase >= 0.5;
       if (shouldFlip !== heroFlipped){
