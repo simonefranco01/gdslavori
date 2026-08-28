@@ -606,7 +606,11 @@
     overflow:hidden;
     border-radius:var(--radius);
     transition:transform .5s var(--ease);
+    touch-action:pan-y; /* lo swipe orizzontale lo gestisce il carosello, non il browser (niente "torna indietro") */
+    cursor:grab;
+    user-select:none;
   }
+  .reviews__track:active{ cursor:grabbing; }
   @media (prefers-reduced-motion: reduce){ .reviews__track{ transition:none; } }
   .review-card{
     flex:0 0 100%;
@@ -1393,6 +1397,43 @@
     }
     goToReview(0);
     startReviewTimer();
+
+    /* Trascinamento reale col dito/mouse. Senza questo, uno swipe orizzontale sulla
+       card non viene "consumato" da nessun elemento e il browser mobile lo legge come
+       gesto di navigazione (torna indietro) — da qui il sito che si chiudeva. */
+    var dragStartX = 0;
+    var dragDeltaX = 0;
+    var isDragging = false;
+    var trackPxWidth = 0;
+
+    reviewsTrack.addEventListener('pointerdown', function(e){
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragDeltaX = 0;
+      trackPxWidth = reviewsTrack.getBoundingClientRect().width;
+      reviewsTrack.style.transition = 'none';
+      clearInterval(reviewTimer);
+      try { reviewsTrack.setPointerCapture(e.pointerId); } catch(err){}
+    });
+    reviewsTrack.addEventListener('pointermove', function(e){
+      if (!isDragging) return;
+      dragDeltaX = e.clientX - dragStartX;
+      var basePx = -reviewIndex * trackPxWidth;
+      reviewsTrack.style.transform = 'translateX(' + (basePx + dragDeltaX) + 'px)';
+    });
+    function endReviewDrag(){
+      if (!isDragging) return;
+      isDragging = false;
+      reviewsTrack.style.transition = '';
+      var threshold = trackPxWidth * 0.15;
+      if (dragDeltaX < -threshold){ goToReview(reviewIndex + 1); }
+      else if (dragDeltaX > threshold){ goToReview(reviewIndex - 1); }
+      else { goToReview(reviewIndex); }
+      dragDeltaX = 0;
+      resetReviewTimer();
+    }
+    reviewsTrack.addEventListener('pointerup', endReviewDrag);
+    reviewsTrack.addEventListener('pointercancel', endReviewDrag);
   }
 
   /* ---- Hero: scena fissata, scroll-linked ----
