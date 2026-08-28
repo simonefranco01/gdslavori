@@ -16,11 +16,30 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Montserrat:wght@400;600&family=Architects+Daughter&display=swap" rel="stylesheet">
 
-<!-- Google tag (gtag.js) — GA4 + Google Ads, unico loader e unico blocco di config -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F5SQ826FX3"></script>
+<!-- Google Consent Mode — lo stato di default va impostato PRIMA che qualunque tag
+     Google si attivi: senza consenso salvato, analytics e ads restano "denied" (nessun
+     cookie di tracciamento), Google riceve solo dati aggregati/modellizzati. Se l'utente
+     aveva già scelto in una visita precedente, si riparte da quella scelta. -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
+  (function(){
+    var stored;
+    try { stored = localStorage.getItem('gds-cookie-consent'); } catch(e){ stored = null; }
+    var granted = stored === 'granted';
+    gtag('consent', 'default', {
+      'ad_storage': granted ? 'granted' : 'denied',
+      'ad_user_data': granted ? 'granted' : 'denied',
+      'ad_personalization': granted ? 'granted' : 'denied',
+      'analytics_storage': granted ? 'granted' : 'denied',
+      'wait_for_update': 500
+    });
+  })();
+</script>
+
+<!-- Google tag (gtag.js) — GA4 + Google Ads, unico loader e unico blocco di config -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F5SQ826FX3"></script>
+<script>
   gtag('js', new Date());
   gtag('config', 'G-F5SQ826FX3');
   gtag('config', 'G-JE0NJFJWFS');
@@ -580,37 +599,40 @@
     max-width:62ch;
   }
 
-  .compare-cats{
-    margin-top:48px;
-    display:grid;
-    gap:18px;
-    grid-template-columns:1fr;
+  /* ============ CAROSELLO RECENSIONI ============ */
+  .reviews{ margin-top:48px; max-width:640px; margin-left:auto; margin-right:auto; }
+  .reviews__track{
+    display:flex;
+    overflow:hidden;
+    border-radius:var(--radius);
+    transition:transform .5s var(--ease);
   }
-  @media (min-width:700px){ .compare-cats{ grid-template-columns:1fr 1fr; } }
-  .cat-card{ padding:26px 24px; border:1px solid rgba(159,165,171,.3); }
-  .cat-card--them{ background:transparent; }
-  .cat-card--us{ background:var(--navy-brand); border-color:var(--navy-brand); }
-  .cat-title{
-    font-family:var(--font-display);
-    font-size:15px;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    margin-bottom:16px;
-    color:var(--gray);
+  @media (prefers-reduced-motion: reduce){ .reviews__track{ transition:none; } }
+  .review-card{
+    flex:0 0 100%;
+    min-width:0;
+    background:var(--navy-brand);
+    padding:32px 28px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:180px;
   }
-  .cat-card--us .cat-title{ color:var(--orange); }
-  .cat-card li{
-    font-size:14.5px;
-    line-height:1.5;
-    padding-left:20px;
-    position:relative;
-    margin-bottom:12px;
-    color:var(--text-secondary-on-dark);
+  .review-card__stars{ color:var(--orange); font-size:17px; letter-spacing:.15em; margin-bottom:14px; }
+  .review-card p.review-card__text{ font-size:16px; line-height:1.55; color:var(--white); max-width:none; margin-bottom:16px; }
+  .review-card p.review-card__author{ font-size:13px; font-weight:600; color:var(--gray); letter-spacing:.02em; }
+  .reviews__dots{ display:flex; justify-content:center; gap:8px; margin-top:18px; }
+  .reviews__dot{
+    width:8px; height:8px;
+    border-radius:50%;
+    border:none;
+    background:rgba(159,165,171,.4);
+    padding:0;
+    cursor:pointer;
+    transition:background-color .2s ease, transform .2s ease;
   }
-  .cat-card li:last-child{ margin-bottom:0; }
-  .cat-card--them li::before{ content:'—'; position:absolute; left:0; color:var(--gray); }
-  .cat-card--us li{ color:var(--white); }
-  .cat-card--us li::before{ content:'✓'; position:absolute; left:0; color:var(--orange); font-weight:700; }
+  .reviews__dot:hover{ background:rgba(159,165,171,.7); }
+  .reviews__dot.is-active{ background:var(--orange); transform:scale(1.2); }
 
   /* ============ PRICING ============ */
   .price-card{
@@ -822,6 +844,34 @@
     .wa-fab__label{ display:none; }
   }
 
+  /* ============ BANNER COOKIE / CONSENSO GDPR ============ */
+  .cookie-banner{
+    position:fixed; left:0; right:0; bottom:0;
+    z-index:80; /* sopra fascia fissa, WhatsApp e barra sticky: è temporaneo e prioritario */
+    background:var(--navy-site);
+    border-top:2px solid var(--orange);
+    padding:18px 20px;
+    padding-bottom:calc(18px + env(safe-area-inset-bottom));
+    transform:translateY(100%);
+    transition:transform .3s var(--ease);
+  }
+  .cookie-banner.is-visible{ transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){ .cookie-banner{ transition:none; } }
+  .cookie-banner__inner{
+    max-width:var(--container); margin:0 auto;
+    display:flex; flex-wrap:wrap; align-items:center;
+    gap:16px 24px; justify-content:space-between;
+  }
+  .cookie-banner__text{
+    flex:1 1 320px;
+    font-size:13.5px; line-height:1.5;
+    color:var(--text-secondary-on-dark);
+    margin:0;
+  }
+  .cookie-banner__text a{ color:var(--orange); text-decoration:underline; }
+  .cookie-banner__actions{ display:flex; gap:10px; flex:0 0 auto; }
+  .cookie-banner__actions .btn{ padding:11px 20px; font-size:14px; }
+
   .img-fallback-note{ display:none; }
 </style>
 </head>
@@ -994,26 +1044,43 @@
     </div>
 
     <div class="differentiator reveal">
-      <h3>Un'unica impresa, un unico referente</h3>
-      <p>Demolizione, impianti, piastrelle, sanitari e finiture li eseguono le nostre squadre, non subappalti diversi coordinati da terzi. Il referente che segue il cantiere è lo stesso dal primo sopralluogo all'ultimo giorno di lavoro.</p>
+      <h3>Cosa dicono i nostri clienti</h3>
+      <p>Recensioni vere, lasciate su Google da chi ha già lavorato con noi.</p>
 
-      <div class="compare-cats">
-        <div class="cat-card cat-card--them">
-          <p class="cat-title">Portale di preventivi</p>
-          <ul>
-            <li>La richiesta viene girata a più imprese della zona</li>
-            <li>Il sopralluogo lo fa un'impresa che non hai ancora incontrato</li>
-            <li>Il referente cambia a seconda di chi risponde per primo</li>
-          </ul>
+      <div class="reviews" aria-roledescription="carosello" aria-label="Recensioni Google">
+        <div class="reviews__track" id="reviewsTrack">
+          <article class="review-card">
+            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+            <p class="review-card__text">Perfetti e puntuali in ogni lavoro.</p>
+            <p class="review-card__author">Daniele Bianucci — Recensione Google</p>
+          </article>
+          <article class="review-card">
+            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+            <p class="review-card__text">Ho affittato alla Ditta l'ammodernamento di alcune stanze della mia abitazione come il bagno e la cucina, la ditta ha lavorato con professionalità e discrezione…</p>
+            <p class="review-card__author">Jack G Jamba — Recensione Google</p>
+          </article>
+          <article class="review-card">
+            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+            <p class="review-card__text">Ci siamo affidati a loro per una ristrutturazione di un nostro locale nei pressi di Prato e abbiamo trovato un proprietario sempre disponibile, gentile e cortese. La squadra che ha fatto i lavori è stata veloce, efficiente ed hanno lasciato tutto in ordine e pulito a fine lavori.</p>
+            <p class="review-card__author">Pietro Chiesi — Recensione Google</p>
+          </article>
+          <article class="review-card">
+            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+            <p class="review-card__text">Impresa seria, professionale e affidabile. Un ringraziamento speciale a Mario, il titolare, sempre disponibile, competente e attento a ogni esigenza del…</p>
+            <p class="review-card__author">Margherita Martini — Recensione Google</p>
+          </article>
+          <article class="review-card">
+            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+            <p class="review-card__text">Mi sono rivolto loro per la realizzione di un pergolato per l'impianto fotovoltaico e la ristrutturazione del tetto della mia casa, mi sono trovato molto bene,…</p>
+            <p class="review-card__author">Martina Cosentino — Recensione Google</p>
+          </article>
+          <article class="review-card">
+            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+            <p class="review-card__text">Ho ristrutturato la cucina e il salotto per creare un open space, sono stati molto gentili ed efficienti. Hanno lasciato tutto pulito, siamo molto soddisfatti! Grazie.</p>
+            <p class="review-card__author">Gabriella Ciolini — Recensione Google</p>
+          </article>
         </div>
-        <div class="cat-card cat-card--us">
-          <p class="cat-title">GDS Lavori</p>
-          <ul>
-            <li>Il sopralluogo lo fa direttamente Mario Del Sapio</li>
-            <li>La squadra in cantiere è quella incontrata al sopralluogo</li>
-            <li>Un solo numero di telefono per tutta la durata del cantiere</li>
-          </ul>
-        </div>
+        <div class="reviews__dots" id="reviewsDots"></div>
       </div>
     </div>
 
@@ -1032,7 +1099,7 @@
 
     <div class="price-card reveal">
       <h3>Ristrutturazione completa del bagno</h3>
-      <p class="price-value">[DA INSERIRE: fascia di prezzo indicativa, es. da X € a Y €]</p>
+      <p class="price-value">Indicativamente da 5.000 € a 15.000 €</p>
       <p class="price-caption">Demolizione, impianti, massetto, posa piastrelle, sanitari e finiture.</p>
     </div>
 
@@ -1055,37 +1122,6 @@
           <li>[DA INSERIRE: eventuali pratiche edilizie o catastali necessarie]</li>
           <li>[DA INSERIRE: eventuali altre esclusioni]</li>
         </ul>
-      </div>
-    </div>
-
-    <div style="max-width:760px; margin:64px auto 0;">
-      <h2 style="font-size:clamp(22px,4vw,30px); margin-bottom:8px;">Domande frequenti</h2>
-      <p class="section-intro" style="margin-bottom:28px;">Le domande che ci fanno più spesso prima di fissare il sopralluogo.</p>
-      <div class="faq">
-        <details>
-          <summary>Il sopralluogo è davvero gratuito?</summary>
-          <p class="faq-answer">Sì. Il sopralluogo e il preventivo scritto non hanno costi, anche se poi non decidi di procedere con noi.</p>
-        </details>
-        <details>
-          <summary>Quanto tempo passa tra il sopralluogo e il preventivo?</summary>
-          <p class="faq-answer">Il preventivo scritto arriva entro 48 ore dal sopralluogo.</p>
-        </details>
-        <details>
-          <summary>Chi esegue materialmente i lavori?</summary>
-          <p class="faq-answer">Le nostre squadre dirette, le stesse che vedi al sopralluogo. Non passiamo il cantiere a imprese terze.</p>
-        </details>
-        <details>
-          <summary>Quanto dura il cantiere?</summary>
-          <p class="faq-answer">Indicativamente [DA INSERIRE: durata complessiva stimata, es. X–Y giorni lavorativi] per una ristrutturazione completa. Il tempo esatto per il tuo bagno lo definiamo al sopralluogo.</p>
-        </details>
-        <details>
-          <summary>Cosa succede se emerge un imprevisto, ad esempio un'infiltrazione?</summary>
-          <p class="faq-answer">Il referente resta lo stesso: te lo segnaliamo, ti spieghiamo cosa serve e il preventivo si aggiorna prima di procedere, non dopo.</p>
-        </details>
-        <details>
-          <summary>Lavorate anche fuori Prato?</summary>
-          <p class="faq-answer">Sì, a Prato e provincia e nell'area di Firenze.</p>
-        </details>
       </div>
     </div>
 
@@ -1142,6 +1178,44 @@
   </div>
 </section>
 
+<!-- ============ FAQ ============ -->
+<section class="section--light" id="faq">
+  <div class="container">
+    <p class="eyebrow">Domande frequenti</p>
+    <h2>Le domande che ci fanno più spesso</h2>
+    <p class="section-intro">Prima di fissare il sopralluogo, le risposte alle domande più comuni.</p>
+    <div class="faq" style="max-width:760px; margin:0 auto;">
+      <details>
+        <summary>Il sopralluogo è davvero gratuito?</summary>
+        <p class="faq-answer">Sì. Il sopralluogo e il preventivo scritto non hanno costi, anche se poi non decidi di procedere con noi.</p>
+      </details>
+      <details>
+        <summary>Quanto tempo passa tra il sopralluogo e il preventivo?</summary>
+        <p class="faq-answer">Il preventivo scritto arriva entro 48 ore dal sopralluogo.</p>
+      </details>
+      <details>
+        <summary>Chi esegue materialmente i lavori?</summary>
+        <p class="faq-answer">Le nostre squadre dirette, le stesse che vedi al sopralluogo. Non passiamo il cantiere a imprese terze.</p>
+      </details>
+      <details>
+        <summary>Quanto dura il cantiere?</summary>
+        <p class="faq-answer">Indicativamente [DA INSERIRE: durata complessiva stimata, es. X–Y giorni lavorativi] per una ristrutturazione completa. Il tempo esatto per il tuo bagno lo definiamo al sopralluogo.</p>
+      </details>
+      <details>
+        <summary>Cosa succede se emerge un imprevisto, ad esempio un'infiltrazione?</summary>
+        <p class="faq-answer">Il referente resta lo stesso: te lo segnaliamo, ti spieghiamo cosa serve e il preventivo si aggiorna prima di procedere, non dopo.</p>
+      </details>
+      <details>
+        <summary>Lavorate anche fuori Prato?</summary>
+        <p class="faq-answer">Sì, a Prato e provincia e nell'area di Firenze.</p>
+      </details>
+    </div>
+    <div class="cta-row" style="justify-content:center; margin-top:48px;">
+      <a href="#form" class="btn btn--ghost-dark">Richiedi il sopralluogo gratuito</a>
+    </div>
+  </div>
+</section>
+
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="container">
@@ -1150,7 +1224,7 @@
     <p>[DA INSERIRE: indirizzo sede], Prato (PO)</p>
     <p>Tel. 0574 202295 — Cell. 347 9053103 — <a href="mailto:mario@gdslavori.it">mario@gdslavori.it</a></p>
     <p>P.IVA [DA INSERIRE: numero partita IVA]</p>
-    <p><a href="/privacy.html">Informativa privacy</a></p>
+    <p><a href="/privacy.html">Informativa privacy</a> — <a href="/cookie-policy.html">Cookie Policy</a> — <a href="#" id="cookieSettingsLink">Preferenze cookie</a></p>
   </div>
 </footer>
 
@@ -1168,9 +1242,77 @@
   <span class="wa-fab__label">WhatsApp</span>
 </a>
 
+<!-- ============ BANNER COOKIE / CONSENSO GDPR ============ -->
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Preferenze cookie">
+  <div class="cookie-banner__inner">
+    <p class="cookie-banner__text">
+      Usiamo cookie tecnici necessari al funzionamento del sito e, solo con il tuo consenso, cookie di analisi e marketing (Google Analytics, Google Ads) per capire come viene usata questa pagina. <a href="/cookie-policy.html">Leggi la Cookie Policy</a>.
+    </p>
+    <div class="cookie-banner__actions">
+      <button type="button" class="btn btn--ghost" id="cookieReject">Rifiuta</button>
+      <button type="button" class="btn btn--primary" id="cookieAccept">Accetta</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
   "use strict";
+
+  /* ---- Banner cookie / consenso GDPR ---- */
+  /* Aggiorna il Google Consent Mode impostato nel <head> (di default "denied" finché
+     non si sceglie): Accetta abilita i cookie di Google Analytics/Ads, Rifiuta li
+     tiene disattivati. La scelta resta salvata, il banner non si ripresenta più. */
+  (function(){
+    var banner = document.getElementById('cookieBanner');
+    var acceptBtn = document.getElementById('cookieAccept');
+    var rejectBtn = document.getElementById('cookieReject');
+    var settingsLink = document.getElementById('cookieSettingsLink');
+    var STORAGE_KEY = 'gds-cookie-consent';
+
+    function getStored(){
+      try { return localStorage.getItem(STORAGE_KEY); } catch(e){ return null; }
+    }
+    function setStored(value){
+      try { localStorage.setItem(STORAGE_KEY, value); } catch(e){}
+    }
+    function updateConsent(granted){
+      if (typeof gtag === 'function'){
+        gtag('consent', 'update', {
+          'ad_storage': granted ? 'granted' : 'denied',
+          'ad_user_data': granted ? 'granted' : 'denied',
+          'ad_personalization': granted ? 'granted' : 'denied',
+          'analytics_storage': granted ? 'granted' : 'denied'
+        });
+      }
+    }
+    function showBanner(){ if (banner) banner.classList.add('is-visible'); }
+    function hideBanner(){ if (banner) banner.classList.remove('is-visible'); }
+
+    if (banner){
+      if (!getStored()) showBanner();
+      if (acceptBtn){
+        acceptBtn.addEventListener('click', function(){
+          setStored('granted');
+          updateConsent(true);
+          hideBanner();
+        });
+      }
+      if (rejectBtn){
+        rejectBtn.addEventListener('click', function(){
+          setStored('denied');
+          updateConsent(false);
+          hideBanner();
+        });
+      }
+    }
+    if (settingsLink){
+      settingsLink.addEventListener('click', function(e){
+        e.preventDefault();
+        showBanner();
+      });
+    }
+  })();
 
   var siteBar = document.getElementById('siteBar');
 
@@ -1213,6 +1355,44 @@
   if (range){
     setCompare(range.value);
     range.addEventListener('input', function(){ setCompare(range.value); });
+  }
+
+  /* ---- Carosello recensioni Google ---- */
+  var reviewsTrack = document.getElementById('reviewsTrack');
+  var reviewsDotsWrap = document.getElementById('reviewsDots');
+  if (reviewsTrack && reviewsDotsWrap){
+    var reviewSlides = reviewsTrack.children;
+    var reviewCount = reviewSlides.length;
+    var reviewIndex = 0;
+    var reviewsReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reviewDots = [];
+    var goToReview = function(i){
+      reviewIndex = (i + reviewCount) % reviewCount;
+      reviewsTrack.style.transform = 'translateX(-' + (reviewIndex * 100) + '%)';
+      reviewDots.forEach(function(d, di){ d.classList.toggle('is-active', di === reviewIndex); });
+    };
+    var reviewTimer;
+    var startReviewTimer = function(){
+      if (reviewsReduceMotion || reviewCount <= 1) return;
+      reviewTimer = setInterval(function(){ goToReview(reviewIndex + 1); }, 6000);
+    };
+    var resetReviewTimer = function(){
+      clearInterval(reviewTimer);
+      startReviewTimer();
+    };
+    for (var ri = 0; ri < reviewCount; ri++){
+      (function(idx){
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'reviews__dot';
+        dot.setAttribute('aria-label', 'Vai alla recensione ' + (idx + 1));
+        dot.addEventListener('click', function(){ goToReview(idx); resetReviewTimer(); });
+        reviewsDotsWrap.appendChild(dot);
+        reviewDots.push(dot);
+      })(ri);
+    }
+    goToReview(0);
+    startReviewTimer();
   }
 
   /* ---- Hero: scena fissata, scroll-linked ----
