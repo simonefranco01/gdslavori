@@ -600,9 +600,11 @@
   }
 
   /* ============ MARQUEE RECENSIONI ============ */
-  /* Scorrimento continuo e infinito: il set di card è duplicato una volta nel markup
-     e l'animazione trasla il binario di esattamente -50% (= la larghezza di un set),
-     così quando "ricomincia" in realtà è già alla card identica successiva: nessuno scatto. */
+  /* Scorrimento continuo e infinito: il set di card è duplicato una volta nel markup,
+     il JS trasla il binario con requestAnimationFrame e "avvolge" la posizione ogni
+     volta che supera la larghezza di un set, così sembra non finire mai. In più si può
+     trascinare col dito/mouse per scorrere manualmente: touch-action:pan-y impedisce al
+     browser di leggere lo swipe orizzontale come gesto "torna indietro". */
   .reviews{ margin-top:48px; }
   .reviews__viewport{
     overflow:hidden;
@@ -613,19 +615,12 @@
     display:flex;
     width:max-content;
     gap:20px;
-    animation:reviews-scroll 46s linear infinite;
     will-change:transform;
+    touch-action:pan-y;
+    cursor:grab;
+    user-select:none;
   }
-  .reviews__viewport:hover .reviews__track{
-    animation-play-state:paused;
-  }
-  @keyframes reviews-scroll{
-    from{ transform:translate3d(0,0,0); }
-    to{ transform:translate3d(-50%,0,0); }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .reviews__track{ animation:none; }
-  }
+  .reviews__track:active{ cursor:grabbing; }
   .review-card{
     flex:0 0 auto;
     width:min(78vw,320px);
@@ -1403,9 +1398,67 @@
     range.addEventListener('input', function(){ setCompare(range.value); });
   }
 
-  /* ---- Recensioni: lo scorrimento continuo è puro CSS (@keyframes reviews-scroll),
-     nessun JS necessario: si ferma da solo al passaggio del mouse e non può più
-     scambiare uno swipe per un gesto di navigazione del browser. ---- */
+  /* ---- Recensioni: scorrimento automatico continuo, ma trascinabile a mano.
+     "offset" è quanti px abbiamo scorso; ogni frame lo si "avvolge" dentro i limiti
+     di un set di card (setWidth) cosicché il ciclo non finisca mai. Se l'utente sta
+     trascinando o il mouse è sopra il carosello, l'avanzamento automatico si ferma;
+     appena rilascia, riparte da dove aveva lasciato. ---- */
+  var reviewsTrack = document.getElementById('reviewsTrack');
+  var reviewsViewport = document.querySelector('.reviews__viewport');
+  if (reviewsTrack && reviewsViewport){
+    var reviewsReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reviewsCycleMs = 46000; /* stesso ritmo di prima: un giro completo in ~46s */
+    var reviewsSetWidth = 0;
+    var reviewsOffset = 0;
+    var reviewsDragging = false;
+    var reviewsHovering = false;
+    var reviewsDragStartX = 0;
+    var reviewsDragStartOffset = 0;
+    var reviewsLastTs = null;
+
+    function measureReviewsSet(){
+      reviewsSetWidth = reviewsTrack.scrollWidth / 2;
+    }
+    function applyReviewsTransform(){
+      if (!reviewsSetWidth) return;
+      var norm = ((reviewsOffset % reviewsSetWidth) + reviewsSetWidth) % reviewsSetWidth;
+      reviewsTrack.style.transform = 'translate3d(-' + norm + 'px,0,0)';
+    }
+    function reviewsTick(ts){
+      if (reviewsLastTs === null) reviewsLastTs = ts;
+      var dt = ts - reviewsLastTs;
+      reviewsLastTs = ts;
+      if (!reviewsDragging && !reviewsHovering && !reviewsReduceMotion && reviewsSetWidth){
+        reviewsOffset += (reviewsSetWidth / reviewsCycleMs) * dt;
+        applyReviewsTransform();
+      }
+      requestAnimationFrame(reviewsTick);
+    }
+
+    measureReviewsSet();
+    window.addEventListener('resize', measureReviewsSet);
+    requestAnimationFrame(reviewsTick);
+
+    reviewsViewport.addEventListener('pointerenter', function(){ reviewsHovering = true; });
+    reviewsViewport.addEventListener('pointerleave', function(){ reviewsHovering = false; });
+
+    reviewsTrack.addEventListener('pointerdown', function(e){
+      reviewsDragging = true;
+      reviewsDragStartX = e.clientX;
+      reviewsDragStartOffset = reviewsOffset;
+      try { reviewsTrack.setPointerCapture(e.pointerId); } catch(err){}
+    });
+    reviewsTrack.addEventListener('pointermove', function(e){
+      if (!reviewsDragging) return;
+      reviewsOffset = reviewsDragStartOffset - (e.clientX - reviewsDragStartX);
+      applyReviewsTransform();
+    });
+    function endReviewsDrag(){
+      reviewsDragging = false;
+    }
+    reviewsTrack.addEventListener('pointerup', endReviewsDrag);
+    reviewsTrack.addEventListener('pointercancel', endReviewsDrag);
+  }
 
   /* ---- Hero: scena fissata, scroll-linked ----
      .hero-scene tiene la corsa di scroll (170vh); .hero (sticky) resta agganciato
