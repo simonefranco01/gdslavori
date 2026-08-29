@@ -599,44 +599,53 @@
     max-width:62ch;
   }
 
-  /* ============ CAROSELLO RECENSIONI ============ */
-  .reviews{ margin-top:48px; max-width:640px; margin-left:auto; margin-right:auto; }
+  /* ============ MARQUEE RECENSIONI ============ */
+  /* Scorrimento continuo e infinito: il set di card è duplicato una volta nel markup
+     e l'animazione trasla il binario di esattamente -50% (= la larghezza di un set),
+     così quando "ricomincia" in realtà è già alla card identica successiva: nessuno scatto. */
+  .reviews{ margin-top:48px; }
+  .reviews__viewport{
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image:linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
   .reviews__track{
     display:flex;
-    overflow:hidden;
-    border-radius:var(--radius);
-    transition:transform .5s var(--ease);
-    touch-action:pan-y; /* lo swipe orizzontale lo gestisce il carosello, non il browser (niente "torna indietro") */
-    cursor:grab;
-    user-select:none;
+    width:max-content;
+    gap:20px;
+    animation:reviews-scroll 46s linear infinite;
+    will-change:transform;
   }
-  .reviews__track:active{ cursor:grabbing; }
-  @media (prefers-reduced-motion: reduce){ .reviews__track{ transition:none; } }
+  .reviews__viewport:hover .reviews__track{
+    animation-play-state:paused;
+  }
+  @keyframes reviews-scroll{
+    from{ transform:translate3d(0,0,0); }
+    to{ transform:translate3d(-50%,0,0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reviews__track{ animation:none; }
+  }
   .review-card{
-    flex:0 0 100%;
-    min-width:0;
+    flex:0 0 auto;
+    width:min(78vw,320px);
     background:var(--navy-brand);
-    padding:32px 28px;
+    border-radius:var(--radius);
+    padding:28px 26px;
     display:flex;
     flex-direction:column;
     justify-content:center;
     min-height:180px;
+    transform:translate3d(0,0,0);
+    transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  }
+  .review-card:hover{
+    transform:translate3d(0,-6px,0);
+    box-shadow:0 16px 32px rgba(16,38,57,.35);
   }
   .review-card__stars{ color:var(--orange); font-size:17px; letter-spacing:.15em; margin-bottom:14px; }
   .review-card p.review-card__text{ font-size:16px; line-height:1.55; color:var(--white); max-width:none; margin-bottom:16px; }
   .review-card p.review-card__author{ font-size:13px; font-weight:600; color:var(--gray); letter-spacing:.02em; }
-  .reviews__dots{ display:flex; justify-content:center; gap:8px; margin-top:18px; }
-  .reviews__dot{
-    width:8px; height:8px;
-    border-radius:50%;
-    border:none;
-    background:rgba(159,165,171,.4);
-    padding:0;
-    cursor:pointer;
-    transition:background-color .2s ease, transform .2s ease;
-  }
-  .reviews__dot:hover{ background:rgba(159,165,171,.7); }
-  .reviews__dot.is-active{ background:var(--orange); transform:scale(1.2); }
 
   /* ============ PRICING ============ */
   .price-card{
@@ -1051,40 +1060,73 @@
       <h3>Cosa dicono i nostri clienti</h3>
       <p>Recensioni vere, lasciate su Google da chi ha già lavorato con noi.</p>
 
-      <div class="reviews" aria-roledescription="carosello" aria-label="Recensioni Google">
-        <div class="reviews__track" id="reviewsTrack">
-          <article class="review-card">
-            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
-            <p class="review-card__text">Perfetti e puntuali in ogni lavoro.</p>
-            <p class="review-card__author">Daniele Bianucci — Recensione Google</p>
-          </article>
-          <article class="review-card">
-            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
-            <p class="review-card__text">Ho affittato alla Ditta l'ammodernamento di alcune stanze della mia abitazione come il bagno e la cucina, la ditta ha lavorato con professionalità e discrezione…</p>
-            <p class="review-card__author">Jack G Jamba — Recensione Google</p>
-          </article>
-          <article class="review-card">
-            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
-            <p class="review-card__text">Ci siamo affidati a loro per una ristrutturazione di un nostro locale nei pressi di Prato e abbiamo trovato un proprietario sempre disponibile, gentile e cortese. La squadra che ha fatto i lavori è stata veloce, efficiente ed hanno lasciato tutto in ordine e pulito a fine lavori.</p>
-            <p class="review-card__author">Pietro Chiesi — Recensione Google</p>
-          </article>
-          <article class="review-card">
-            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
-            <p class="review-card__text">Impresa seria, professionale e affidabile. Un ringraziamento speciale a Mario, il titolare, sempre disponibile, competente e attento a ogni esigenza del…</p>
-            <p class="review-card__author">Margherita Martini — Recensione Google</p>
-          </article>
-          <article class="review-card">
-            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
-            <p class="review-card__text">Mi sono rivolto loro per la realizzione di un pergolato per l'impianto fotovoltaico e la ristrutturazione del tetto della mia casa, mi sono trovato molto bene,…</p>
-            <p class="review-card__author">Martina Cosentino — Recensione Google</p>
-          </article>
-          <article class="review-card">
-            <div class="review-card__stars" aria-hidden="true">★★★★★</div>
-            <p class="review-card__text">Ho ristrutturato la cucina e il salotto per creare un open space, sono stati molto gentili ed efficienti. Hanno lasciato tutto pulito, siamo molto soddisfatti! Grazie.</p>
-            <p class="review-card__author">Gabriella Ciolini — Recensione Google</p>
-          </article>
+      <div class="reviews" aria-label="Recensioni Google">
+        <div class="reviews__viewport">
+          <div class="reviews__track" id="reviewsTrack">
+            <!-- Set 1 -->
+            <article class="review-card">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Perfetti e puntuali in ogni lavoro.</p>
+              <p class="review-card__author">Daniele Bianucci — Recensione Google</p>
+            </article>
+            <article class="review-card">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Ho affittato alla Ditta l'ammodernamento di alcune stanze della mia abitazione come il bagno e la cucina, la ditta ha lavorato con professionalità e discrezione…</p>
+              <p class="review-card__author">Jack G Jamba — Recensione Google</p>
+            </article>
+            <article class="review-card">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Ci siamo affidati a loro per una ristrutturazione di un nostro locale nei pressi di Prato e abbiamo trovato un proprietario sempre disponibile, gentile e cortese. La squadra che ha fatto i lavori è stata veloce, efficiente ed hanno lasciato tutto in ordine e pulito a fine lavori.</p>
+              <p class="review-card__author">Pietro Chiesi — Recensione Google</p>
+            </article>
+            <article class="review-card">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Impresa seria, professionale e affidabile. Un ringraziamento speciale a Mario, il titolare, sempre disponibile, competente e attento a ogni esigenza del…</p>
+              <p class="review-card__author">Margherita Martini — Recensione Google</p>
+            </article>
+            <article class="review-card">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Mi sono rivolto loro per la realizzione di un pergolato per l'impianto fotovoltaico e la ristrutturazione del tetto della mia casa, mi sono trovato molto bene,…</p>
+              <p class="review-card__author">Martina Cosentino — Recensione Google</p>
+            </article>
+            <article class="review-card">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Ho ristrutturato la cucina e il salotto per creare un open space, sono stati molto gentili ed efficienti. Hanno lasciato tutto pulito, siamo molto soddisfatti! Grazie.</p>
+              <p class="review-card__author">Gabriella Ciolini — Recensione Google</p>
+            </article>
+            <!-- Set 2 (duplicato, identico: serve per il loop senza scatti) -->
+            <article class="review-card" aria-hidden="true">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Perfetti e puntuali in ogni lavoro.</p>
+              <p class="review-card__author">Daniele Bianucci — Recensione Google</p>
+            </article>
+            <article class="review-card" aria-hidden="true">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Ho affittato alla Ditta l'ammodernamento di alcune stanze della mia abitazione come il bagno e la cucina, la ditta ha lavorato con professionalità e discrezione…</p>
+              <p class="review-card__author">Jack G Jamba — Recensione Google</p>
+            </article>
+            <article class="review-card" aria-hidden="true">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Ci siamo affidati a loro per una ristrutturazione di un nostro locale nei pressi di Prato e abbiamo trovato un proprietario sempre disponibile, gentile e cortese. La squadra che ha fatto i lavori è stata veloce, efficiente ed hanno lasciato tutto in ordine e pulito a fine lavori.</p>
+              <p class="review-card__author">Pietro Chiesi — Recensione Google</p>
+            </article>
+            <article class="review-card" aria-hidden="true">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Impresa seria, professionale e affidabile. Un ringraziamento speciale a Mario, il titolare, sempre disponibile, competente e attento a ogni esigenza del…</p>
+              <p class="review-card__author">Margherita Martini — Recensione Google</p>
+            </article>
+            <article class="review-card" aria-hidden="true">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Mi sono rivolto loro per la realizzione di un pergolato per l'impianto fotovoltaico e la ristrutturazione del tetto della mia casa, mi sono trovato molto bene,…</p>
+              <p class="review-card__author">Martina Cosentino — Recensione Google</p>
+            </article>
+            <article class="review-card" aria-hidden="true">
+              <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+              <p class="review-card__text">Ho ristrutturato la cucina e il salotto per creare un open space, sono stati molto gentili ed efficienti. Hanno lasciato tutto pulito, siamo molto soddisfatti! Grazie.</p>
+              <p class="review-card__author">Gabriella Ciolini — Recensione Google</p>
+            </article>
+          </div>
         </div>
-        <div class="reviews__dots" id="reviewsDots"></div>
       </div>
     </div>
 
@@ -1361,80 +1403,9 @@
     range.addEventListener('input', function(){ setCompare(range.value); });
   }
 
-  /* ---- Carosello recensioni Google ---- */
-  var reviewsTrack = document.getElementById('reviewsTrack');
-  var reviewsDotsWrap = document.getElementById('reviewsDots');
-  if (reviewsTrack && reviewsDotsWrap){
-    var reviewSlides = reviewsTrack.children;
-    var reviewCount = reviewSlides.length;
-    var reviewIndex = 0;
-    var reviewsReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var reviewDots = [];
-    var goToReview = function(i){
-      reviewIndex = (i + reviewCount) % reviewCount;
-      reviewsTrack.style.transform = 'translateX(-' + (reviewIndex * 100) + '%)';
-      reviewDots.forEach(function(d, di){ d.classList.toggle('is-active', di === reviewIndex); });
-    };
-    var reviewTimer;
-    var startReviewTimer = function(){
-      if (reviewsReduceMotion || reviewCount <= 1) return;
-      reviewTimer = setInterval(function(){ goToReview(reviewIndex + 1); }, 6000);
-    };
-    var resetReviewTimer = function(){
-      clearInterval(reviewTimer);
-      startReviewTimer();
-    };
-    for (var ri = 0; ri < reviewCount; ri++){
-      (function(idx){
-        var dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'reviews__dot';
-        dot.setAttribute('aria-label', 'Vai alla recensione ' + (idx + 1));
-        dot.addEventListener('click', function(){ goToReview(idx); resetReviewTimer(); });
-        reviewsDotsWrap.appendChild(dot);
-        reviewDots.push(dot);
-      })(ri);
-    }
-    goToReview(0);
-    startReviewTimer();
-
-    /* Trascinamento reale col dito/mouse. Senza questo, uno swipe orizzontale sulla
-       card non viene "consumato" da nessun elemento e il browser mobile lo legge come
-       gesto di navigazione (torna indietro) — da qui il sito che si chiudeva. */
-    var dragStartX = 0;
-    var dragDeltaX = 0;
-    var isDragging = false;
-    var trackPxWidth = 0;
-
-    reviewsTrack.addEventListener('pointerdown', function(e){
-      isDragging = true;
-      dragStartX = e.clientX;
-      dragDeltaX = 0;
-      trackPxWidth = reviewsTrack.getBoundingClientRect().width;
-      reviewsTrack.style.transition = 'none';
-      clearInterval(reviewTimer);
-      try { reviewsTrack.setPointerCapture(e.pointerId); } catch(err){}
-    });
-    reviewsTrack.addEventListener('pointermove', function(e){
-      if (!isDragging) return;
-      dragDeltaX = e.clientX - dragStartX;
-      var basePx = -reviewIndex * trackPxWidth;
-      reviewsTrack.style.transform = 'translateX(' + (basePx + dragDeltaX) + 'px)';
-    });
-    function endReviewDrag(){
-      if (!isDragging) return;
-      isDragging = false;
-      reviewsTrack.style.transition = '';
-      var threshold = trackPxWidth * 0.15;
-      if (dragDeltaX < -threshold){ goToReview(reviewIndex + 1); }
-      else if (dragDeltaX > threshold){ goToReview(reviewIndex - 1); }
-      else { goToReview(reviewIndex); }
-      dragDeltaX = 0;
-      resetReviewTimer();
-    }
-    reviewsTrack.addEventListener('pointerup', endReviewDrag);
-    reviewsTrack.addEventListener('pointercancel', endReviewDrag);
-  }
+  /* ---- Recensioni: lo scorrimento continuo è puro CSS (@keyframes reviews-scroll),
+     nessun JS necessario: si ferma da solo al passaggio del mouse e non può più
+     scambiare uno swipe per un gesto di navigazione del browser. ---- */
 
   /* ---- Hero: scena fissata, scroll-linked ----
      .hero-scene tiene la corsa di scroll (170vh); .hero (sticky) resta agganciato
