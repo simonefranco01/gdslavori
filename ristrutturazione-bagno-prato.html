@@ -282,7 +282,7 @@
     min-height:560px;
     overflow:hidden;
     background:var(--navy-site);
-    --zoom:1; --zoom2:1.15; --fade:0; --lift:0;
+    --zoom:1; --zoom2:1.04; --fade:0; --lift:0;
   }
 
   .hero-photo-wrap{
@@ -320,6 +320,14 @@
     width:100%; height:100%;
     object-fit:cover;
     transform:scale(var(--zoom2,1.15));
+  }
+
+  /* Il video verticale (9:16) da mobile non ha esattamente le proporzioni dello
+     schermo del telefono: con "cover" veniva tagliato ai lati più del previsto,
+     sembrando molto più zoomato che su desktop. Con "contain" si vede l'inquadratura
+     intera, con eventuali bande sopra/sotto dello stesso blu di sfondo. */
+  @media (max-width:899px){
+    .hero-photo, .hero-shutter-photo{ object-fit:contain; }
   }
 
   /* Scritte "adesivo": stessa posizione, sopra la linea di livella. Sono staccate
@@ -1560,7 +1568,7 @@
       var zoom = 1 + p * 0.08;
       var exit = clamp((p - 0.5) / 0.5, 0, 1);
       var exitEase = exit * exit * (3 - 2 * exit); /* smoothstep: dissolvenza morbida, non lineare */
-      var zoom2 = 1.15 - exitEase * 0.15; /* la foto vecchia entra più stretta e si assesta al suo posto */
+      var zoom2 = 1.04 - exitEase * 0.04; /* la foto vecchia entra leggermente più stretta e si assesta al suo posto */
       heroStage.style.setProperty('--zoom', zoom.toFixed(4));
       heroStage.style.setProperty('--zoom2', zoom2.toFixed(4));
       heroStage.style.setProperty('--fade', exitEase.toFixed(4));
