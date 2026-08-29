@@ -340,20 +340,26 @@
     transform:translate(-50%,-50%);
     z-index:6; /* sopra sia la foto base sia l'otturatore (z-index:5): lo scambio è indipendente dalla dissolvenza */
     display:flex; flex-direction:row; align-items:flex-start; gap:2px;
+    max-width:min(94vw,620px);
+    padding:0 8px;
     font-family:var(--font-display);
     font-weight:700;
     text-transform:uppercase;
     letter-spacing:-.01em;
-    font-size:clamp(19px,5.4vw,33px);
-    line-height:1.05;
+    font-size:clamp(16px,4.8vw,33px);
+    line-height:1.15;
     text-align:center;
-    white-space:nowrap;
     color:var(--orange);
     text-shadow:0 2px 4px rgba(16,38,57,.55), 0 1px 12px rgba(16,38,57,.35);
     pointer-events:none;
     opacity:1;
     transition:opacity .2s ease;
   }
+  /* Il testo può andare a capo se non entra in una riga: min-width:0 sblocca il
+     restringimento dentro un contenitore flex (di default un elemento flex non
+     scende mai sotto la sua larghezza naturale, quindi senza questo il testo lungo
+     usciva dai bordi dello schermo invece di andare a capo). */
+  .hero-bubble__text{ flex:1 1 auto; min-width:0; }
   .hero-bubble--reality{ opacity:0; }
   .hero.is-flipped .hero-bubble--dream{ opacity:0; }
   .hero.is-flipped .hero-bubble--reality{ opacity:1; }
@@ -377,17 +383,6 @@
   .hero-tick--br{ bottom:20px; right:20px; border-width:0 2px 2px 0; animation-delay:.25s; }
   @keyframes tick-in{ from{ opacity:0; } to{ opacity:1; } }
 
-  .hero-slate{
-    position:absolute; top:20px; left:52px; right:52px;
-    display:flex; justify-content:space-between;
-    font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
-    color:rgba(255,255,255,.85);
-    z-index:2;
-    opacity:0;
-    animation:fade-up .6s var(--ease) forwards;
-    animation-delay:.75s;
-  }
-  .hero-slate span{ background:rgba(16,38,57,.55); padding:3px 8px; }
 
   .hero-copy{
     position:relative; z-index:3;
@@ -449,7 +444,7 @@
     .hero-scrim{ display:none !important; }
     .hero-shutter{ display:none !important; }
     .hero-bubble{ display:none !important; } /* la battuta funziona solo con lo scroll: senza, niente scritte */
-    .hero-tick,.hero-slate{ animation:none !important; opacity:1 !important; transform:none !important; }
+    .hero-tick{ animation:none !important; opacity:1 !important; transform:none !important; }
     .hero-copy{ position:relative !important; height:auto !important; padding:28px 20px 0 !important; max-width:none !important; transform:none !important; }
     .hero-copy .eyebrow,.hero h1,.hero-sub,.hero-cta{ animation:none !important; opacity:1 !important; transform:none !important; }
   }
@@ -947,7 +942,8 @@
         <source src="assets/bagno-moderno-verticale.mp4.mp4" media="(max-width: 899px)" type="video/mp4">
         <source src="assets/bagno-moderno.mp4.mp4" type="video/mp4">
       </video>
-      <span class="hero-bubble hero-bubble--dream" aria-hidden="true">vorresti un bagno come questo
+      <span class="hero-bubble hero-bubble--dream" aria-hidden="true">
+        <span class="hero-bubble__text">vorresti un bagno come questo</span>
         <svg class="hero-bubble__arrow" viewBox="0 0 40 54" aria-hidden="true">
           <path class="hero-bubble__arrow-tail" d="M32 2 C6 8, 4 24, 18 36"/>
           <path class="hero-bubble__arrow-head" d="M6 32 L28 28 L18 52 Z"/>
@@ -961,12 +957,13 @@
         <source src="assets/bagno-vecchio.mp4.mp4" type="video/mp4">
       </video>
     </div>
-    <span class="hero-bubble hero-bubble--reality" aria-hidden="true">ma invece ne hai uno come questo</span>
+    <span class="hero-bubble hero-bubble--reality" aria-hidden="true">
+      <span class="hero-bubble__text">ma invece ne hai uno come questo</span>
+    </span>
     <span class="hero-tick hero-tick--tl" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--tr" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--bl" aria-hidden="true"></span>
     <span class="hero-tick hero-tick--br" aria-hidden="true"></span>
-    <p class="hero-slate" aria-hidden="true"><span>Prato, Toscana</span><span>Lavoro concluso</span></p>
 
     <div class="hero-copy">
       <p class="eyebrow">Impresa edile a Prato dal 1986</p>
