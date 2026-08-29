@@ -264,7 +264,7 @@
      progresso. Nessuna libreria: solo position:sticky + un rAF-loop leggero. */
   .hero-scene{
     position:relative;
-    height:170vh;
+    height:230vh; /* più alta = più corsa di scroll = transizione più lenta e graduale al tocco del touchpad */
     padding:0; /* la regola globale "section{padding:64px 0}" non deve toccare la scena fissata */
   }
 
@@ -898,7 +898,7 @@
 </div>
 
 <!-- ============ HERO: scena fissata (pinned) ============ -->
-<!-- .hero-scene è la corsa di scroll (170vh); .hero resta agganciato in cima per
+<!-- .hero-scene è la corsa di scroll (230vh); .hero resta agganciato in cima per
      tutta quella corsa: zoom lento sulla foto, poi negli ultimi passaggi un pannello
      si chiude dalla stessa linea di livella dell'apertura (eco dell'apertura, non una
      dissolvenza a bianco) e cede il posto al Gradimento, senza stacco netto. -->
@@ -1474,7 +1474,7 @@
   }
 
   /* ---- Hero: scena fissata, scroll-linked ----
-     .hero-scene tiene la corsa di scroll (170vh); .hero (sticky) resta agganciato
+     .hero-scene tiene la corsa di scroll (230vh); .hero (sticky) resta agganciato
      in cima per tutta quella corsa. Mentre si scorre: leggero zoom in avanti sulla
      foto moderna (--zoom), poi nell'ultima metà la foto vecchia si dissolve sopra
      (--fade) mentre si assesta da uno zoom più stretto al suo (--zoom2) — le due
