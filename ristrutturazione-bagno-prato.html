@@ -92,7 +92,11 @@
     --font-body:'Montserrat', -apple-system, Segoe UI, Roboto, sans-serif;
 
     --container:1120px;
-    --radius:2px;
+    --radius:10px;        /* pulsanti ed elementi piccoli: arrotondati, non più squadrati */
+    --radius-lg:20px;      /* card e blocchi grandi (immagini, form, prezzi) */
+    --line:rgba(16,38,57,.12);
+    --shadow-card:0 14px 32px rgba(16,38,57,.10);
+    --shadow-cta:0 10px 22px rgba(242,121,17,.32);
     --ease:cubic-bezier(.22,.68,.36,1);
     --header-h:68px;
   }
@@ -122,8 +126,8 @@
   .container{ max-width:var(--container); margin:0 auto; padding:0 20px; }
   @media (min-width:768px){ .container{ padding:0 40px; } }
 
-  section{ padding:64px 0; }
-  @media (min-width:768px){ section{ padding:96px 0; } }
+  section{ padding:56px 0; }
+  @media (min-width:768px){ section{ padding:80px 0; } }
 
   .section--dark{ background:var(--navy-site); color:var(--white); }
   #form{ scroll-margin-top:var(--header-h); } /* la fascia fissa non deve coprire il form al click su "#form" */
@@ -150,7 +154,7 @@
     color:var(--text-secondary-on-light);
     font-size:16px;
     line-height:1.5;
-    margin-bottom:40px;
+    margin-bottom:32px;
   }
   .section--dark .section-intro{ color:var(--text-secondary-on-dark); }
 
@@ -174,19 +178,20 @@
     font-family:var(--font-body);
     font-weight:600;
     font-size:15.5px;
-    padding:13px 24px;
+    padding:14px 26px;
     border-radius:var(--radius);
     text-decoration:none;
     border:1.5px solid transparent;
     cursor:pointer;
-    transition:transform .18s var(--ease), background-color .18s var(--ease), border-color .18s var(--ease);
+    transition:filter .18s var(--ease), transform .18s var(--ease), background-color .18s var(--ease), border-color .18s var(--ease);
     white-space:nowrap;
   }
   .btn--primary{
-    background:var(--orange);
+    background:linear-gradient(135deg, #ff9a3d, var(--orange));
     color:var(--navy-site); /* testo scuro su arancione: unica combinazione che passa AA */
+    box-shadow:var(--shadow-cta);
   }
-  .btn--primary:hover{ background:#d96b0a; }
+  .btn--primary:hover{ filter:brightness(1.05); }
   .btn--primary:active{ transform:scale(.98); }
 
   .btn--ghost{
@@ -229,9 +234,11 @@
     z-index:60;
     height:var(--header-h);
     display:flex; align-items:center;
-    background:var(--navy-site);
-    border-bottom:2px solid var(--orange);
-    box-shadow:0 10px 26px -16px rgba(16,38,57,.6);
+    background:rgba(251,251,250,.9);
+    -webkit-backdrop-filter:blur(14px);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 10px 26px -16px rgba(16,38,57,.25);
     opacity:0; transform:translateY(-100%);
     pointer-events:none;
     transition:transform .3s var(--ease), opacity .3s var(--ease);
@@ -248,11 +255,11 @@
   .site-bar__brandtext{
     display:flex; flex-direction:column; line-height:1.2;
     font-family:var(--font-body); font-weight:600; font-size:13px;
-    color:var(--white); letter-spacing:.01em; white-space:nowrap;
+    color:var(--navy-site); letter-spacing:.01em; white-space:nowrap;
   }
   .site-bar__brandtext small{
     font-weight:400; font-size:10px; letter-spacing:.03em;
-    color:rgba(255,255,255,.65);
+    color:var(--text-secondary-on-light);
   }
   @media (max-width:480px){ .site-bar__brandtext{ display:none; } }
   .site-bar .btn{ padding:11px 18px; font-size:14px; min-height:auto; flex:none; }
@@ -446,20 +453,22 @@
     margin:0 auto 44px;
     aspect-ratio:4/3;
     overflow:hidden;
-    border:1px solid var(--gray);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
     background:repeating-linear-gradient(135deg, var(--navy-brand) 0 10px, #263e54 10px 20px);
   }
   .compare-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; color:transparent; font-size:0; }
   .compare-after{ clip-path:inset(0 calc(100% - var(--pos,50%)) 0 0); }
   .compare-label{
-    position:absolute; top:12px;
+    position:absolute; top:16px;
     background:rgba(16,38,57,.82);
     color:var(--white);
     font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
-    padding:5px 10px;
+    padding:6px 12px;
+    border-radius:100px;
   }
-  .compare-label--before{ left:12px; }
-  .compare-label--after{ right:12px; }
+  .compare-label--before{ left:16px; }
+  .compare-label--after{ right:16px; }
   .compare-handle{
     position:absolute; top:0; bottom:0;
     left:var(--pos,50%);
@@ -507,10 +516,11 @@
   }
   @media (min-width:640px){ .benefit-grid{ grid-template-columns:1fr 1fr; } }
   .benefit-card{
-    background:var(--navy-brand);
+    background:linear-gradient(160deg, #35516d, var(--navy-brand));
     color:var(--white);
     padding:28px 24px;
-    border-radius:var(--radius);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
   }
   .benefit-icon{ color:var(--orange); margin-bottom:16px; }
   .benefit-card h3{
@@ -625,19 +635,20 @@
   .review-card{
     flex:0 0 auto;
     width:min(78vw,320px);
-    background:var(--navy-brand);
-    border-radius:var(--radius);
+    background:linear-gradient(160deg, #35516d, var(--navy-brand));
+    border-radius:var(--radius-lg);
     padding:28px 26px;
     display:flex;
     flex-direction:column;
     justify-content:center;
     min-height:180px;
+    box-shadow:var(--shadow-card);
     transform:translate3d(0,0,0);
     transition:transform .3s var(--ease), box-shadow .3s var(--ease);
   }
   .review-card:hover{
     transform:translate3d(0,-6px,0);
-    box-shadow:0 16px 32px rgba(16,38,57,.35);
+    box-shadow:0 20px 40px rgba(16,38,57,.4);
   }
   .review-card__stars{ color:var(--orange); font-size:17px; letter-spacing:.15em; margin-bottom:14px; }
   .review-card p.review-card__text{ font-size:16px; line-height:1.55; color:var(--white); max-width:none; margin-bottom:16px; }
@@ -646,11 +657,12 @@
   /* ============ PRICING ============ */
   .price-card{
     max-width:640px;
-    margin:0 auto 40px;
-    background:var(--navy-brand);
+    margin:0 auto 32px;
+    background:linear-gradient(160deg, #35516d, var(--navy-brand));
     color:var(--white);
     padding:32px 28px;
-    border-radius:var(--radius);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
   }
   .price-card h3{ font-size:20px; margin-bottom:6px; }
   .price-value{
@@ -731,9 +743,10 @@
   .form-card{
     max-width:600px;
     margin:0 auto;
-    background:var(--navy-brand);
+    background:linear-gradient(160deg, #35516d, var(--navy-brand));
     padding:32px 24px;
-    border-radius:var(--radius);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-card);
   }
   @media (min-width:600px){ .form-card{ padding:44px 40px; } }
   .form-row{ margin-bottom:18px; }
@@ -791,15 +804,32 @@
   footer{
     background:var(--navy-site);
     color:var(--text-secondary-on-dark);
-    padding:36px 0 100px;
-    font-size:13px;
+    padding:48px 0 100px;
+    font-size:14px;
     line-height:1.7;
     border-top:1px solid rgba(159,165,171,.2);
   }
-  @media (min-width:768px){ footer{ padding-bottom:36px; } }
-  footer strong{ color:var(--white); }
-  footer a{ text-decoration:underline; }
-  .footer-logo{ height:32px; width:auto; margin-bottom:14px; display:block; }
+  @media (min-width:768px){ footer{ padding-bottom:40px; } }
+  footer a{ color:rgba(255,255,255,.8); text-decoration:underline; }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:32px;
+  }
+  .footer-brand{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .footer-logo{ height:38px; width:auto; display:block; }
+  .footer-name{ font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--white); }
+  .footer-col-title{
+    margin-bottom:12px;
+    font-size:12px; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+    color:rgba(255,255,255,.5);
+  }
+  .footer-links{ display:flex; flex-direction:column; gap:9px; }
+  .footer-links button{
+    align-self:flex-start; padding:0; background:transparent; border:0;
+    border-bottom:1px solid rgba(255,255,255,.3);
+    font:inherit; color:rgba(255,255,255,.8); cursor:pointer;
+  }
 
   /* ============ STICKY MOBILE CTA ============ */
   .sticky-cta{
@@ -826,10 +856,10 @@
     position:fixed; right:18px; bottom:18px;
     z-index:55;
     display:inline-flex; align-items:center; gap:10px;
-    padding:13px 18px 13px 14px;
+    padding:14px 20px 14px 15px;
     background:#25D366; color:#fff;
     font-family:var(--font-body); font-weight:600; font-size:14px;
-    border-radius:3px;
+    border-radius:100px;
     box-shadow:0 12px 28px -10px rgba(37,211,102,.55), 0 4px 12px rgba(0,0,0,.18);
     opacity:0; transform:translateY(12px); pointer-events:none;
     transition:transform .25s var(--ease), background-color .2s var(--ease), opacity .25s var(--ease);
@@ -1261,12 +1291,33 @@
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="container">
-    <img src="assets/logo-gds-trimmed.png" alt="" aria-hidden="true" class="footer-logo">
-    <p><strong>GDS Lavori S.R.L.</strong></p>
-    <p>[DA INSERIRE: indirizzo sede], Prato (PO)</p>
-    <p>Tel. 0574 202295 — Cell. 347 9053103 — <a href="mailto:mario@gdslavori.it">mario@gdslavori.it</a></p>
-    <p>P.IVA [DA INSERIRE: numero partita IVA]</p>
-    <p><a href="/privacy.html">Informativa privacy</a> — <a href="/cookie-policy.html">Cookie Policy</a> — <a href="#" id="cookieSettingsLink">Preferenze cookie</a></p>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="assets/logo-gds-trimmed.png" alt="" aria-hidden="true" class="footer-logo">
+          <span class="footer-name">GDS Lavori S.R.L.</span>
+        </div>
+        <p>Impresa edile a Prato dal 1986.<br>[DA INSERIRE: indirizzo sede], Prato (PO)</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Contatti</p>
+        <p><a href="tel:+390574202295">0574 202295</a> (ufficio)<br>
+        <a href="tel:+393479053103">347 9053103</a> (cellulare)<br>
+        <a href="mailto:mario@gdslavori.it">mario@gdslavori.it</a></p>
+      </div>
+      <div>
+        <p class="footer-col-title">Dati societari</p>
+        <p>P.IVA [DA INSERIRE: numero partita IVA]</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Legale</p>
+        <div class="footer-links">
+          <a href="/privacy.html">Informativa privacy</a>
+          <a href="/cookie-policy.html">Cookie Policy</a>
+          <button type="button" id="cookieSettingsLink">Preferenze cookie</button>
+        </div>
+      </div>
+    </div>
   </div>
 </footer>
 
