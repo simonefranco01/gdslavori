@@ -322,14 +322,6 @@
     transform:scale(var(--zoom2,1.15));
   }
 
-  /* Il video verticale (9:16) da mobile non ha esattamente le proporzioni dello
-     schermo del telefono: con "cover" veniva tagliato ai lati più del previsto,
-     sembrando molto più zoomato che su desktop. Con "contain" si vede l'inquadratura
-     intera, con eventuali bande sopra/sotto dello stesso blu di sfondo. */
-  @media (max-width:899px){
-    .hero-photo, .hero-shutter-photo{ object-fit:contain; }
-  }
-
   /* Scritte "adesivo": stessa posizione, sopra la linea di livella. Sono staccate
      dal ritaglio della foto (altrimenti il bordo del ritaglio, passando proprio da
      lì vicino, taglierebbe la scritta a metà per un istante) — lo scroll le scambia
@@ -938,7 +930,7 @@
 <section class="hero-scene" id="heroScene">
   <div class="hero" id="hero">
     <div class="hero-photo-wrap">
-      <video class="hero-photo" width="1920" height="1080" poster="assets/img/bagno-prato-dopo.jpg.png" autoplay muted loop playsinline aria-label="Bagno ristrutturato a Prato, finiture complete">
+      <video class="hero-photo" id="heroModernVideo" width="1920" height="1080" poster="assets/img/bagno-prato-dopo.jpg.png" autoplay muted loop playsinline preload="auto" aria-label="Bagno ristrutturato a Prato, finiture complete">
         <source src="assets/bagno-moderno-verticale.mp4.mp4" media="(max-width: 899px)" type="video/mp4">
         <source src="assets/bagno-moderno.mp4.mp4" type="video/mp4">
       </video>
@@ -952,7 +944,7 @@
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-shutter" aria-hidden="true">
-      <video class="hero-shutter-photo" id="heroShutterVideo" width="1920" height="1080" poster="assets/img/bagno-prato-prima.jpg.png" muted loop playsinline aria-hidden="true">
+      <video class="hero-shutter-photo" id="heroShutterVideo" width="1920" height="1080" poster="assets/img/bagno-prato-prima.jpg.png" muted loop playsinline preload="auto" aria-hidden="true">
         <source src="assets/bagno-vecchio-verticale.mp4.mp4" media="(max-width: 899px)" type="video/mp4">
         <source src="assets/bagno-vecchio.mp4.mp4" type="video/mp4">
       </video>
@@ -1552,10 +1544,42 @@
 
   function clamp(v, min, max){ return Math.min(max, Math.max(min, v)); }
 
+  /* Il video del bagno moderno parte dal secondo 2 invece che dal fotogramma
+     iniziale, già da prima che l'utente inizi a scorrere. */
+  var heroModernVideo = document.getElementById('heroModernVideo');
+  if (heroModernVideo){
+    var seekModernStart = function(){
+      if (heroModernVideo.duration && heroModernVideo.duration > 2){
+        try { heroModernVideo.currentTime = 2; } catch(e){}
+      }
+    };
+    if (heroModernVideo.readyState >= 1){ seekModernStart(); }
+    else { heroModernVideo.addEventListener('loadedmetadata', seekModernStart, { once: true }); }
+  }
+
   if (heroScene && heroStage && !reduceMotion){
     var heroTicking = false;
     var heroFlipped = false;
     var heroShutterVideo = document.getElementById('heroShutterVideo');
+
+    /* Il secondo video compare nell'istante esatto in cui lo scroll raggiunge il
+       punto di passaggio: se in quel momento il browser deve ancora scaricare e
+       decodificare il primo fotogramma, lo scroll sembra "scattare" proprio lì.
+       Lo si scalda già al caricamento della pagina — lo si avvia un istante e lo
+       si rimette subito in pausa — così i fotogrammi sono già pronti quando serve. */
+    if (heroShutterVideo){
+      var primeShutterVideo = function(){
+        var playPromise = heroShutterVideo.play();
+        if (playPromise && playPromise.then){
+          playPromise.then(function(){
+            heroShutterVideo.pause();
+            heroShutterVideo.currentTime = 0;
+          }).catch(function(){});
+        }
+      };
+      if (heroShutterVideo.readyState >= 2){ primeShutterVideo(); }
+      else { heroShutterVideo.addEventListener('loadeddata', primeShutterVideo, { once: true }); }
+    }
     function updateHeroScene(){
       heroTicking = false;
       var total = heroScene.offsetHeight - window.innerHeight;
