@@ -70,8 +70,8 @@
     <div class="form-layout">
 
       <div class="reveal">
-        <form action="https://formspree.io/f/mjgzbnzv" method="POST" 
-      class="form" data-form="quote">
+            <form action="https://formspree.io/f/mjgzbnzv" method="POST" 
+      class="form" data-form="quote" id="quoteForm">
           <input type="hidden" name="form-name" value="preventivo" />
           <input type="hidden" name="_next" value="https://www.gdslavori.it/grazie.html" />
           <input type="hidden" name="_subject" value="Nuova richiesta preventivo — sito GDS Lavori" />
@@ -239,6 +239,34 @@
   <span class="wa-fab__label">WhatsApp<small>Risposta in giornata</small></span>
 </a>
 
+<script>
+(function(){
+  var form = document.getElementById('quoteForm');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
+    var oldHtml = btn ? btn.innerHTML : '';
+    if(btn){ btn.disabled = true; btn.style.opacity = '.7'; btn.textContent = 'Invio in corso…'; }
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(function(res){
+      if(res.ok){
+        window.location.href = 'grazie.html';
+      } else {
+        throw new Error('invio non riuscito');
+      }
+    })
+    .catch(function(){
+      if(btn){ btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = oldHtml; }
+      alert('Invio non riuscito. Riprova, oppure chiamaci allo 347 9053103.');
+    });
+  });
+})();
+</script>
 <script src="script.js" defer></script>
 </body>
 </html>
