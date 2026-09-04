@@ -528,55 +528,104 @@
     color:rgba(255,255,255,.78);
   }
 
-  /* ============ PHASES / TIMELINE ============ */
+  /* ============ PHASES / TIMELINE "A SERPENTINA" ============ */
+  /* Sei tappe, sempre le stesse; un unico percorso SVG le collega in ordine
+     seguendo la loro posizione reale sulla pagina — calcolata in JS, non scritta a
+     mano. Su mobile le card restano impilate in un'unica colonna e il percorso
+     diventa quindi una linea verticale dritta; da ~940px in su diventano una
+     griglia 3+3 e lo stesso percorso serpeggia da destra a sinistra tra le due
+     righe, senza bisogno di markup diverso tra le due versioni. Il tracciato è
+     disegnato due volte: uno sottile e fisso sempre visibile (il "binario"), uno
+     arancione più marcato che si disegna con un'animazione quando la sezione
+     entra nello schermo (stroke-dashoffset, l'effetto "tratto a penna"). */
   .phases{ position:relative; }
-  .phase-list{ position:relative; }
+  .phase-list{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:44px;
+    padding-top:8px;
+  }
+  .phase-path-svg{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    z-index:1;
+    overflow:visible;
+    pointer-events:none;
+  }
+  .phase-path-track{
+    fill:none;
+    stroke:rgba(159,165,171,.25);
+    stroke-width:2.5px;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  .phase-path-draw{
+    fill:none;
+    stroke:var(--orange);
+    stroke-width:5px;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition:stroke-dashoffset 1.6s var(--ease);
+  }
+  @media (prefers-reduced-motion: reduce){ .phase-path-draw{ transition:none; } }
+
   .phase{
     position:relative;
-    display:grid;
-    grid-template-columns:44px 1fr;
-    gap:20px;
-    padding-bottom:36px;
+    z-index:2;
+    /* Il pallino sta fuori dal flusso, ancorato in alto a sinistra della card: il
+       testo (indentato di padding-left) non gli passa mai sopra, e la linea che
+       attraversa la card orizzontalmente — passando per il centro del pallino,
+       a x=26px — resta sempre in quella corsia libera, mai dentro alle righe di
+       testo, qualunque sia la lunghezza del titolo o della descrizione. */
+    padding-left:70px;
+    min-height:52px;
     opacity:0;
-    transform:translateX(-16px);
+    transform:translateY(18px);
     transition:opacity .55s var(--ease), transform .55s var(--ease);
   }
-  .phase.is-visible{ opacity:1; transform:translateX(0); }
-  .phase:last-child{ padding-bottom:0; }
-  .phase-index-col{ position:relative; display:flex; justify-content:center; }
-  .phase-line{
+  .phase.is-visible{ opacity:1; transform:translateY(0); }
+  .phase-badge{
     position:absolute;
-    top:6px; bottom:-36px;
-    width:1px;
-    background:rgba(159,165,171,.35);
-  }
-  .phase:last-child .phase-line{ display:none; }
-  .phase-dot{
-    width:10px; height:10px;
+    left:0; top:0;
+    width:52px; height:52px;
     border-radius:50%;
-    background:var(--navy-site);
-    border:2px solid var(--orange);
-    margin-top:2px;
-    z-index:1;
-  }
-  .phase-num{
-    font-family:var(--font-display);
-    font-size:12px;
+    background:var(--navy-site); /* stesso colore dello sfondo: "spegne" il tratto della linea che ci passa dietro */
+    border:3px solid var(--orange);
     color:var(--orange);
-    letter-spacing:.05em;
-    margin-bottom:4px;
-    display:block;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:19px;
+    display:grid;
+    place-items:center;
   }
-  .phase h3{ font-size:18px; color:var(--white); margin-bottom:4px; }
-  .phase p{ font-size:14.5px; color:var(--text-secondary-on-dark); line-height:1.5; }
+  .phase h3{ font-size:18px; color:var(--white); margin-bottom:6px; padding-top:6px; }
+  .phase p{ font-size:14.5px; color:var(--text-secondary-on-dark); line-height:1.5; max-width:34ch; }
   .phase-time{
     display:inline-block;
-    margin-top:8px;
+    margin-top:10px;
     font-size:12.5px;
     font-weight:600;
     color:var(--gray);
     border:1px solid rgba(159,165,171,.4);
-    padding:3px 9px;
+    padding:4px 10px;
+    border-radius:100px;
+  }
+  @media (min-width:940px){
+    .phase-list{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      column-gap:40px;
+      row-gap:68px;
+    }
+    /* Da qui in su il pallino torna al centro, sopra al testo invece che a
+       fianco: il percorso SVG (calcolato in JS) sa già che deve deviare fuori
+       dalla griglia per scendere da una riga alla successiva, quindi il testo
+       resta comunque libero anche in questa disposizione. */
+    .phase{ padding-left:0; display:flex; flex-direction:column; align-items:center; text-align:center; }
+    .phase-badge{ position:static; margin:0 auto 14px; }
+    .phase h3{ padding-top:0; }
+    .phase p{ max-width:30ch; }
   }
 
   .phase-note{
@@ -1053,59 +1102,45 @@
     <p class="section-intro">Sei fasi, sempre nello stesso ordine. I tempi variano in base alle dimensioni del bagno e allo stato degli impianti esistenti: li quantifichiamo sul tuo cantiere durante il sopralluogo.</p>
 
     <div class="phase-list" id="phaseList">
+      <svg class="phase-path-svg" id="phasePathSvg" aria-hidden="true">
+        <path class="phase-path-track" id="phasePathTrack"></path>
+        <path class="phase-path-draw" id="phasePathDraw"></path>
+      </svg>
       <div class="phase">
-        <div class="phase-index-col"><span class="phase-line" aria-hidden="true"></span><span class="phase-dot" aria-hidden="true"></span></div>
-        <div>
-          <span class="phase-num">01</span>
-          <h3>Demolizione</h3>
-          <p>Rimozione di sanitari, piastrelle e massetto esistenti.</p>
-          <span class="phase-time">Indicativo 1–2 giorni</span>
-        </div>
+        <span class="phase-badge" aria-hidden="true">01</span>
+        <h3>Demolizione</h3>
+        <p>Rimozione di sanitari, piastrelle e massetto esistenti.</p>
+        <span class="phase-time">Indicativo 1–2 giorni</span>
       </div>
       <div class="phase">
-        <div class="phase-index-col"><span class="phase-line" aria-hidden="true"></span><span class="phase-dot" aria-hidden="true"></span></div>
-        <div>
-          <span class="phase-num">02</span>
-          <h3>Impianti idraulici ed elettrici</h3>
-          <p>Nuove tubazioni, scarichi, punti luce e prese a norma.</p>
-          <span class="phase-time">Indicativo 2–3 giorni</span>
-        </div>
+        <span class="phase-badge" aria-hidden="true">02</span>
+        <h3>Impianti idraulici ed elettrici</h3>
+        <p>Nuove tubazioni, scarichi, punti luce e prese a norma.</p>
+        <span class="phase-time">Indicativo 2–3 giorni</span>
       </div>
       <div class="phase">
-        <div class="phase-index-col"><span class="phase-line" aria-hidden="true"></span><span class="phase-dot" aria-hidden="true"></span></div>
-        <div>
-          <span class="phase-num">03</span>
-          <h3>Massetto e impermeabilizzazione</h3>
-          <p>Preparazione del piano di posa e protezione dall'acqua.</p>
-          <span class="phase-time">Indicativo 1–2 giorni + asciugatura</span>
-        </div>
+        <span class="phase-badge" aria-hidden="true">03</span>
+        <h3>Massetto e impermeabilizzazione</h3>
+        <p>Preparazione del piano di posa e protezione dall'acqua.</p>
+        <span class="phase-time">Indicativo 1–2 giorni + asciugatura</span>
       </div>
       <div class="phase">
-        <div class="phase-index-col"><span class="phase-line" aria-hidden="true"></span><span class="phase-dot" aria-hidden="true"></span></div>
-        <div>
-          <span class="phase-num">04</span>
-          <h3>Posa piastrelle</h3>
-          <p>Pavimento e rivestimento.</p>
-          <span class="phase-time">Indicativo 3–4 giorni</span>
-        </div>
+        <span class="phase-badge" aria-hidden="true">04</span>
+        <h3>Posa piastrelle</h3>
+        <p>Pavimento e rivestimento.</p>
+        <span class="phase-time">Indicativo 3–4 giorni</span>
       </div>
       <div class="phase">
-        <div class="phase-index-col"><span class="phase-line" aria-hidden="true"></span><span class="phase-dot" aria-hidden="true"></span></div>
-        <div>
-          <span class="phase-num">05</span>
-          <h3>Sanitari e rubinetteria</h3>
-          <p>Installazione di sanitari, piatto doccia o vasca, rubinetteria.</p>
-          <span class="phase-time">Indicativo 1–2 giorni</span>
-        </div>
+        <span class="phase-badge" aria-hidden="true">05</span>
+        <h3>Sanitari e rubinetteria</h3>
+        <p>Installazione di sanitari, piatto doccia o vasca, rubinetteria.</p>
+        <span class="phase-time">Indicativo 1–2 giorni</span>
       </div>
       <div class="phase">
-        <div class="phase-index-col"><span class="phase-dot" aria-hidden="true"></span></div>
-        <div>
-          <span class="phase-num">06</span>
-          <h3>Finiture e consegna</h3>
-          <p>Stuccature, silicone, pulizia finale e sopralluogo di consegna.</p>
-          <span class="phase-time">Indicativo 1 giorno</span>
-        </div>
+        <span class="phase-badge" aria-hidden="true">06</span>
+        <h3>Finiture e consegna</h3>
+        <p>Stuccature, silicone, pulizia finale e sopralluogo di consegna.</p>
+        <span class="phase-time">Indicativo 1 giorno</span>
       </div>
     </div>
 
@@ -1534,6 +1569,116 @@
   /* ---- Fasi in sequenza: stagger via transition-delay in base all'ordine ---- */
   var phases = document.querySelectorAll('#phaseList .phase');
   phases.forEach(function(el, i){ el.style.transitionDelay = (i * 0.12) + 's'; });
+
+  /* ---- Percorso tra le fasi del cantiere ----
+     Su mobile i sei cerchietti sono impilati in un'unica colonna: una sola linea
+     verticale li collega tutti, dal primo all'ultimo. Da ~940px in su diventano
+     una griglia 3+3: qui si disegnano DUE linee separate e indipendenti, una sotto
+     ogni riga (1-2-3 e 4-5-6) — non collegate tra loro, niente percorso che scende
+     da una riga all'altra. Le righe si riconoscono dalla coordinata Y dei
+     cerchietti (stessa altezza = stessa riga); se invece sono tutti alla stessa X
+     (colonna unica, il caso mobile) si tratta come un'unica riga con tutti e sei. */
+  var phaseList = document.getElementById('phaseList');
+  var phasePathSvg = document.getElementById('phasePathSvg');
+  var phasePathTrack = document.getElementById('phasePathTrack');
+  var phasePathDraw = document.getElementById('phasePathDraw');
+  if (phaseList && phasePathSvg && phasePathTrack && phasePathDraw){
+    var phasePathReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var phasePathDrawn = false;
+
+    /* Curva morbida (Catmull-Rom → Bézier) attraverso una lista di punti: passa
+       esattamente per ognuno, arrotondando solo l'ingresso e l'uscita. */
+    function smoothPathFromPoints(pts){
+      if (pts.length < 2) return '';
+      var d = 'M' + pts[0].x + ',' + pts[0].y + ' ';
+      for (var i = 0; i < pts.length - 1; i++){
+        var p0 = pts[i - 1] || pts[i];
+        var p1 = pts[i];
+        var p2 = pts[i + 1];
+        var p3 = pts[i + 2] || p2;
+        var c1x = p1.x + (p2.x - p0.x) / 6;
+        var c1y = p1.y + (p2.y - p0.y) / 6;
+        var c2x = p2.x - (p3.x - p1.x) / 6;
+        var c2y = p2.y - (p3.y - p1.y) / 6;
+        d += 'C' + c1x + ',' + c1y + ' ' + c2x + ',' + c2y + ' ' + p2.x + ',' + p2.y + ' ';
+      }
+      return d;
+    }
+
+    /* Raggruppa i punti in righe (stessa Y = stessa riga). Se ogni punto finisce
+       nella sua riga da solo (nessun punto condivide la Y di un altro) significa
+       che sono impilati in un'unica colonna, come su mobile: in quel caso li si
+       tratta come un'unica riga di sei, per avere la linea verticale continua
+       richiesta. Altrimenti (griglia multi-colonna) ogni riga resta un segmento
+       a sé, separato dalle altre. */
+    function groupIntoRows(points){
+      var rows = [];
+      points.forEach(function(p){
+        var currentRow = rows[rows.length - 1];
+        if (currentRow && Math.abs(currentRow[0].y - p.y) < 4){
+          currentRow.push(p);
+        } else {
+          rows.push([p]);
+        }
+      });
+      if (rows.length === points.length){
+        return [points];
+      }
+      return rows;
+    }
+
+    function buildPhasePath(){
+      var badges = phaseList.querySelectorAll('.phase-badge');
+      if (!badges.length) return;
+      var listRect = phaseList.getBoundingClientRect();
+      phasePathSvg.setAttribute('viewBox', '0 0 ' + listRect.width + ' ' + listRect.height);
+      var points = [];
+      badges.forEach(function(b){
+        var r = b.getBoundingClientRect();
+        points.push({
+          x: r.left + r.width / 2 - listRect.left,
+          y: r.top + r.height / 2 - listRect.top
+        });
+      });
+      var d = groupIntoRows(points).map(function(row){ return smoothPathFromPoints(row); }).join(' ');
+      phasePathTrack.setAttribute('d', d);
+      phasePathDraw.setAttribute('d', d);
+      var len = phasePathDraw.getTotalLength();
+      phasePathDraw.style.strokeDasharray = len;
+      /* Se il tratto è già stato "disegnato" (sezione già vista) non lo si nasconde
+         di nuovo ad ogni ridimensionamento — resterebbe visibile, come deve. */
+      phasePathDraw.style.strokeDashoffset = phasePathDrawn || phasePathReduceMotion ? 0 : len;
+    }
+
+    buildPhasePath();
+    /* Il font Poppins in caricamento può cambiare di qualche pixel la dimensione
+       dei cerchietti dopo la prima misurazione: si ricalcola una volta di sicurezza
+       appena pronto, così il tracciato resta agganciato ai centri esatti. */
+    if (document.fonts && document.fonts.ready){
+      document.fonts.ready.then(buildPhasePath).catch(function(){});
+    }
+    var phasePathResizeTimer;
+    window.addEventListener('resize', function(){
+      clearTimeout(phasePathResizeTimer);
+      phasePathResizeTimer = setTimeout(buildPhasePath, 150);
+    });
+
+    if ('IntersectionObserver' in window){
+      var phasePathIo = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting && !phasePathDrawn){
+            phasePathDrawn = true;
+            phasePathDraw.style.strokeDashoffset = 0;
+            phasePathIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      phasePathIo.observe(phaseList);
+    } else {
+      phasePathDrawn = true;
+      phasePathDraw.style.strokeDashoffset = 0;
+    }
+  }
 
   /* ---- Slider prima/dopo ---- */
   var range = document.getElementById('compareRange');
