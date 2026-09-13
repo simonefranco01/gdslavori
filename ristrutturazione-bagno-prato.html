@@ -1903,5 +1903,42 @@
   });
 })();
 </script>
+<script>
+(function () {
+  if (typeof gtag !== 'function') return;
+
+  // 1) Profondità di scroll: 25 / 50 / 75%
+  var soglie = [25, 50, 75], inviate = {};
+  function controllaScroll() {
+    var h = document.documentElement;
+    var utile = h.scrollHeight - h.clientHeight;
+    if (utile <= 0) return;
+    var perc = (h.scrollTop || document.body.scrollTop) / utile * 100;
+    soglie.forEach(function (s) {
+      if (perc >= s && !inviate[s]) {
+        inviate[s] = true;
+        gtag('event', 'scroll_parziale', { percentuale: s });
+      }
+    });
+  }
+  window.addEventListener('scroll', controllaScroll, { passive: true });
+  controllaScroll();
+
+  // 2) Sezioni raggiunte
+  if ('IntersectionObserver' in window) {
+    var viste = {};
+    var obs = new IntersectionObserver(function (voci) {
+      voci.forEach(function (v) {
+        if (!v.isIntersecting) return;
+        var id = v.target.id;
+        if (!id || viste[id]) return;
+        viste[id] = true;
+        gtag('event', 'sezione_vista', { sezione: id });
+      });
+    }, { threshold: 0.01 });
+    document.querySelectorAll('section[id]').forEach(function (s) { obs.observe(s); });
+  }
+})();
+</script>
 </body>
 </html>
